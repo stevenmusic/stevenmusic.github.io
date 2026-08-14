@@ -165,13 +165,26 @@ body{
 .go svg{width:14px;height:14px;flex:none;transition:transform .2s}
 .card:active .go svg{transform:translateX(3px)}
 
-/* 平板寬度:小卡改成左圖右文,避免整頁被四張全寬預覽圖拉得太長 */
-@media(min-width:560px) and (max-width:899px){
+/* 小卡改成左圖右文:四張全寬預覽圖疊起來,手機頁面會從 1.3 個螢幕長到 3.2 個 */
+@media(max-width:899px){
   .card--sm{flex-direction:row}
   .card--sm .thumb{
     width:38%;aspect-ratio:auto;
     border-bottom:none;border-right:1px solid var(--line);
   }
+}
+/* 手機再收一輪:縮圖已經在旁邊了,卡片標題再放一顆 34px 的 icon 只是多佔一行 */
+@media(max-width:559px){
+  .grid{gap:14px}
+  .card--sm .thumb{width:42%}
+  .card--sm .card-body{padding:15px}
+  .card--sm .icon{display:none}
+  .card--sm .who{display:none}
+  .card--sm h2{font-size:var(--fs-lg)}
+  .card--sm .go{padding-top:14px}
+  .card--feature .thumb{aspect-ratio:16 / 9}
+  .card--feature .card-body{padding:18px}
+  .card--feature .who{display:none}
 }
 /* 主打卡:桌機左圖右文 */
 @media(min-width:760px){
