@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0C0A07">
+<title>Steven Music — 音樂教育工具集</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0C0A07;
+  --panel:#161209;
+  --panel-2:#201A0F;
+  --gold:#C9A24B;
+  --gold-bright:#EFD48A;
+  --ivory:#F4ECDA;
+  --muted:#8A7D5F;
+  --muted-bright:#B6A576;
+  --line:#2A2415;
+  --shadow-sm:0 4px 14px rgba(0,0,0,.35);
+  --shadow-md:0 10px 26px rgba(0,0,0,.5);
+  --shadow-lg:0 18px 44px rgba(0,0,0,.6);
+  --radius-sm:8px;
+  --radius-md:14px;
+  --radius-lg:18px;
+  --radius-pill:999px;
+  --fs-2xs:11px;
+  --fs-xs:12px;
+  --fs-sm:13px;
+  --fs-md:14px;
+  --fs-lg:16px;
+  --fs-xl:19px;
+  --fs-2xl:26px;
+  --fs-3xl:34px;
+  color-scheme:dark;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(201,162,75,.08), transparent 60%),
+    var(--bg);
+  color:var(--ivory);
+  font-family:"Noto Sans TC",sans-serif;
+  display:flex;flex-direction:column;align-items:center;
+  padding:56px 20px 40px;
+}
+
+/* ── Hero ───────────────────────── */
+.hero{
+  text-align:center;max-width:640px;margin-bottom:48px;
+}
+.hero .kicker{
+  font-size:var(--fs-xs);letter-spacing:.24em;text-transform:uppercase;
+  color:var(--muted-bright);margin-bottom:14px;font-weight:500;
+}
+.hero h1{
+  font-family:"Noto Serif TC",serif;font-weight:700;
+  font-size:clamp(28px, 7vw, var(--fs-3xl));
+  color:var(--gold-bright);letter-spacing:.02em;
+  line-height:1.3;margin-bottom:16px;
+}
+.hero h1 span{color:var(--ivory);font-weight:600}
+.hero p{
+  font-size:var(--fs-md);color:var(--muted-bright);line-height:1.7;
+}
+
+/* ── 工具卡片網格 ───────────────────────── */
+.grid{
+  width:100%;max-width:920px;
+  display:grid;grid-template-columns:1fr;gap:16px;
+}
+@media(min-width:640px){
+  .grid{grid-template-columns:1fr 1fr}
+}
+.card{
+  position:relative;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  padding:24px 22px;
+  text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;gap:10px;
+  transition:border-color .2s, transform .2s, box-shadow .2s, background .2s;
+  overflow:hidden;
+}
+.card::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg, rgba(201,162,75,.06), transparent 55%);
+  opacity:0;transition:opacity .2s;pointer-events:none;
+}
+.card:active{
+  transform:scale(.98);
+  border-color:var(--gold);
+  background:var(--panel-2);
+  box-shadow:var(--shadow-md);
+}
+.card:active::before{opacity:1}
+.card .icon{
+  width:44px;height:44px;border-radius:var(--radius-md);
+  background:var(--panel-2);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--gold);flex:none;margin-bottom:4px;
+}
+.card .icon svg{width:22px;height:22px}
+.card h2{
+  font-family:"Noto Serif TC",serif;font-weight:700;
+  font-size:var(--fs-xl);color:var(--gold-bright);
+  display:flex;align-items:center;gap:8px;
+}
+.card .tag{
+  font-size:var(--fs-2xs);color:var(--muted);
+  border:1px solid var(--line);border-radius:var(--radius-sm);
+  padding:2px 8px;font-weight:500;white-space:nowrap;
+}
+.card p{
+  font-size:var(--fs-sm);color:var(--muted-bright);line-height:1.65;
+  flex:1;
+}
+.card .go{
+  display:flex;align-items:center;gap:6px;
+  font-size:var(--fs-xs);color:var(--gold);font-weight:700;
+  margin-top:4px;
+}
+.card .go svg{width:14px;height:14px;transition:transform .2s}
+.card:active .go svg{transform:translateX(3px)}
+
+/* ── Footer ───────────────────────── */
+footer{
+  margin-top:56px;text-align:center;
+  font-size:var(--fs-xs);color:var(--muted);
+  letter-spacing:.04em;
+}
+footer a{color:var(--muted-bright);text-decoration:none;border-bottom:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="kicker">Steven Music</div>
+  <h1>音樂教育<span>工具集</span></h1>
+  <p>為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。</p>
+</div>
+
+<div class="grid">
+
+  <a class="card" href="ScrollScore/">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+    </div>
+    <h2>ScrollScore <span class="tag">樂譜播放器</span></h2>
+    <p>橫向捲動樂譜播放器，支援 MusicXML 匯入、鋼琴鍵盤與鼓組視覺化，並可匯出練習/教學影片。</p>
+    <div class="go">開啟工具
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </div>
+  </a>
+
+  <a class="card" href="SightScore/">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </div>
+    <h2>SightScore <span class="tag">視奏生成</span></h2>
+    <p>依 ABRSM／Trinity 各級規則，程式化產生無限量視奏練習譜，適合每日練習與考前準備。</p>
+    <div class="go">開啟工具
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </div>
+  </a>
+
+  <a class="card" href="HarmonyMap/">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M6 6l12 12M18 6L6 18"/></svg>
+    </div>
+    <h2>HarmonyMap <span class="tag">和聲樂理</span></h2>
+    <p>互動式和弦與音階理論工具，視覺化調性關係，輔助創作、即興與樂理理解。</p>
+    <div class="go">開啟工具
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </div>
+  </a>
+
+  <a class="card" href="LoudNorm/">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+    </div>
+    <h2>LoudNorm <span class="tag">音量正規化</span></h2>
+    <p>將音訊／影片響度自動校正至 -14 LUFS 標準，適用於串流平台發布前處理，全程於瀏覽器端完成。</p>
+    <div class="go">開啟工具
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </div>
+  </a>
+
+</div>
+
+<footer>musicsteven.com 開發 &middot; <a href="https://musicsteven.com" target="_blank" rel="noopener">前往主網站</a></footer>
+
+</body>
+</html>
