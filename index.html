@@ -2,11 +2,19 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0C0A07">
 <title>Steven Music — 音樂工具箱</title>
+<meta name="description" content="為鋼琴教學、樂理練習與影音製作打造的免費網頁工具：捲動樂譜播放器、視奏題庫生成、和聲樂理視覺化、音訊響度正規化。免安裝、免註冊，開啟即用。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Steven Music — 音樂工具箱">
+<meta property="og:description" content="為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。">
+<meta property="og:url" content="https://stevenmusic.github.io/">
+<meta property="og:site_name" content="Steven Music">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230C0A07'/%3E%3Cpath d='M13 22V10l9-1.6V19' fill='none' stroke='%23EFD48A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='10.5' cy='22' r='3' fill='%23EFD48A'/%3E%3Ccircle cx='19.5' cy='19' r='3' fill='%23EFD48A'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0C0A07;
@@ -18,9 +26,9 @@
   --muted:#8A7D5F;
   --muted-bright:#B6A576;
   --line:#2A2415;
+  --line-bright:#4A4028;
   --shadow-sm:0 4px 14px rgba(0,0,0,.35);
   --shadow-md:0 10px 26px rgba(0,0,0,.5);
-  --shadow-lg:0 18px 44px rgba(0,0,0,.6);
   --radius-sm:8px;
   --radius-md:14px;
   --radius-lg:18px;
@@ -30,198 +38,450 @@
   --fs-sm:13px;
   --fs-md:14px;
   --fs-lg:16px;
-  --fs-xl:19px;
+  --fs-xl:20px;
   --fs-2xl:26px;
-  --fs-3xl:34px;
+  --section-gap:clamp(52px, 8vw, 84px);
   color-scheme:dark;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{min-height:100%}
+html{-webkit-text-size-adjust:100%}
 body{
+  min-height:100%;
   background:
     radial-gradient(1200px 600px at 50% -10%, rgba(201,162,75,.08), transparent 60%),
     var(--bg);
   color:var(--ivory);
   font-family:"Noto Sans TC",sans-serif;
-  display:flex;flex-direction:column;align-items:center;
-  padding:56px 20px 40px;
+  padding:clamp(32px, 6vw, 56px) 20px 0;
 }
+.wrap{max-width:1120px;margin:0 auto}
 
 /* ── Hero ───────────────────────── */
-.hero{
-  text-align:center;max-width:640px;margin-bottom:48px;
-}
+.hero{text-align:center;max-width:680px;margin:0 auto clamp(30px, 5vw, 46px)}
 .hero .kicker{
   font-size:var(--fs-xs);letter-spacing:.24em;text-transform:uppercase;
   color:var(--muted-bright);margin-bottom:14px;font-weight:500;
 }
 .hero h1{
   font-family:"Noto Serif TC",serif;font-weight:700;
-  font-size:clamp(28px, 7vw, var(--fs-3xl));
+  font-size:clamp(32px, 8vw, 48px);
   color:var(--gold-bright);letter-spacing:.02em;
-  line-height:1.3;margin-bottom:16px;
+  line-height:1.25;margin-bottom:16px;
 }
-.hero h1 span{color:var(--ivory);font-weight:600}
-.hero p{
-  font-size:var(--fs-md);color:var(--muted-bright);line-height:1.7;
+.hero h1 span{color:var(--ivory)}
+.hero .lede{font-size:var(--fs-lg);color:var(--muted-bright);line-height:1.75}
+/* 賣點從內文抽出來變成獨立的一排——埋在句子裡沒人讀得到 */
+.badges{
+  list-style:none;display:flex;flex-wrap:wrap;justify-content:center;
+  gap:8px;margin-top:22px;
+}
+.badges li{
+  font-size:var(--fs-xs);color:var(--gold);font-weight:500;
+  border:1px solid var(--line);background:rgba(201,162,75,.05);
+  border-radius:var(--radius-pill);padding:5px 13px;
 }
 
 /* ── 工具卡片網格 ───────────────────────── */
-.grid{
-  width:100%;max-width:920px;
-  display:grid;grid-template-columns:1fr;gap:16px;
-}
-@media(min-width:640px){
-  .grid{grid-template-columns:1fr 1fr}
+.grid{display:grid;grid-template-columns:1fr;gap:18px}
+@media(min-width:900px){
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .card--feature{grid-column:1 / -1}
 }
 .card{
   position:relative;
   background:var(--panel);
   border:1px solid var(--line);
   border-radius:var(--radius-lg);
-  padding:24px 22px;
   text-decoration:none;color:inherit;
-  display:flex;flex-direction:column;gap:10px;
-  transition:border-color .2s, transform .2s, box-shadow .2s, background .2s;
+  display:flex;flex-direction:column;
   overflow:hidden;
+  transition:border-color .2s, transform .2s, box-shadow .2s;
 }
-.card::before{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(135deg, rgba(201,162,75,.06), transparent 55%);
-  opacity:0;transition:opacity .2s;pointer-events:none;
-}
-.card:active{
-  transform:scale(.98);
-  border-color:var(--gold);
-  background:var(--panel-2);
-  box-shadow:var(--shadow-md);
-}
-.card:active::before{opacity:1}
+.card:active{transform:scale(.99);border-color:var(--gold);box-shadow:var(--shadow-md)}
+.card:focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px}
 /* 只在滑鼠這種真的能「懸停」的裝置上開 hover 效果——觸控裝置點一下會卡住 hover 樣式
    直到點別的地方才解除,那不是懸停,是誤觸的殘留樣式 */
 @media (hover:hover) and (pointer:fine){
-  .card:hover{
-    border-color:var(--gold);
-    box-shadow:var(--shadow-sm);
-    transform:translateY(-2px);
-  }
-  .card:hover::before{opacity:1}
+  .card:hover{border-color:var(--gold);box-shadow:var(--shadow-md);transform:translateY(-3px)}
   .card:hover .icon{
     border-color:var(--gold);
     box-shadow:0 0 0 1px rgba(201,162,75,.18), 0 0 18px rgba(201,162,75,.28);
   }
+  .card:hover .thumb svg{transform:scale(1.04)}
+  .card:hover .go svg{transform:translateX(4px)}
 }
-.card-head{display:flex;align-items:center;gap:12px}
+
+/* 預覽區:目前是示意插圖,換成實際截圖時把 <svg> 換成
+   <img src="preview/scrollscore.webp" alt="ScrollScore 操作畫面" loading="lazy"> 即可 */
+.thumb{
+  position:relative;flex:none;
+  background:linear-gradient(160deg, var(--panel-2), #14100A);
+  border-bottom:1px solid var(--line);
+  aspect-ratio:16 / 10;overflow:hidden;
+}
+.thumb svg,.thumb img{
+  display:block;width:100%;height:100%;object-fit:cover;
+  transition:transform .45s ease;
+}
+
+.card-body{flex:1;display:flex;flex-direction:column;padding:20px}
+.card--feature .card-body{padding:clamp(20px, 3vw, 30px)}
+.card-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .card .icon{
-  width:44px;height:44px;border-radius:var(--radius-md);
+  width:34px;height:34px;border-radius:10px;
   background:var(--panel-2);border:1px solid var(--line);
   display:flex;align-items:center;justify-content:center;
   color:var(--gold);flex:none;
   transition:border-color .2s, box-shadow .2s;
 }
-.card .icon svg{width:22px;height:22px}
+.card .icon svg{width:18px;height:18px}
 .card h2{
   font-family:"Noto Serif TC",serif;font-weight:700;
-  font-size:var(--fs-xl);color:var(--gold-bright);
-  display:flex;align-items:center;gap:8px;
+  font-size:var(--fs-xl);color:var(--gold-bright);line-height:1.2;
 }
-.card .tag{
+.card--feature h2{font-size:var(--fs-2xl)}
+.tag{
   font-size:var(--fs-2xs);color:var(--muted-bright);
   border:1px solid var(--line);border-radius:var(--radius-sm);
   padding:2px 8px;font-weight:500;white-space:nowrap;
 }
-.card p{
-  font-size:var(--fs-sm);color:var(--muted-bright);line-height:1.65;
-  flex:1;
+.desc{font-size:var(--fs-sm);color:var(--muted-bright);line-height:1.7}
+.card--feature .desc{font-size:var(--fs-md);max-width:46ch}
+.points{list-style:none;margin-top:16px;display:grid;gap:8px}
+.points li{
+  font-size:var(--fs-sm);color:var(--ivory);line-height:1.6;
+  padding-left:18px;position:relative;
 }
-.card .go{
+.points li::before{
+  content:"";position:absolute;left:2px;top:.62em;
+  width:5px;height:5px;border-radius:50%;background:var(--gold);
+}
+.who{margin-top:14px;font-size:var(--fs-xs);color:var(--muted);line-height:1.6}
+.go{
+  margin-top:auto;padding-top:18px;
   display:flex;align-items:center;gap:6px;
-  font-size:var(--fs-xs);color:var(--gold);font-weight:700;
-  margin-top:4px;
+  font-size:var(--fs-sm);color:var(--gold);font-weight:700;
 }
-.card .go svg{width:14px;height:14px;transition:transform .2s}
+.go svg{width:14px;height:14px;flex:none;transition:transform .2s}
 .card:active .go svg{transform:translateX(3px)}
+
+/* 平板寬度:小卡改成左圖右文,避免整頁被四張全寬預覽圖拉得太長 */
+@media(min-width:560px) and (max-width:899px){
+  .card--sm{flex-direction:row}
+  .card--sm .thumb{
+    width:38%;aspect-ratio:auto;
+    border-bottom:none;border-right:1px solid var(--line);
+  }
+}
+/* 主打卡:桌機左圖右文 */
+@media(min-width:760px){
+  .card--feature{flex-direction:row}
+  .card--feature .thumb{
+    width:52%;aspect-ratio:auto;
+    border-bottom:none;border-right:1px solid var(--line);
+  }
+}
+
+/* ── 常見問題 ───────────────────────── */
+.faq{margin-top:var(--section-gap)}
+.section-title{
+  font-family:"Noto Serif TC",serif;font-weight:700;
+  font-size:var(--fs-2xl);color:var(--gold-bright);
+  text-align:center;margin-bottom:24px;
+}
+.faq-list{max-width:760px;margin:0 auto;display:grid;gap:10px}
+details{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius-md);overflow:hidden;
+}
+details[open]{border-color:var(--line-bright)}
+summary{
+  cursor:pointer;list-style:none;
+  padding:15px 18px;
+  font-size:var(--fs-md);font-weight:500;color:var(--ivory);
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+}
+summary::-webkit-details-marker{display:none}
+summary::after{
+  content:"";flex:none;width:8px;height:8px;margin-right:4px;
+  border-right:1.5px solid var(--gold);border-bottom:1.5px solid var(--gold);
+  transform:rotate(45deg);transition:transform .2s;
+}
+details[open] summary::after{transform:rotate(-135deg)}
+summary:focus-visible{outline:2px solid var(--gold-bright);outline-offset:-3px}
+details p{padding:0 18px 17px;font-size:var(--fs-sm);color:var(--muted-bright);line-height:1.85}
+
+/* ── Footer ───────────────────────── */
+footer{
+  margin-top:var(--section-gap);
+  border-top:1px solid var(--line);
+  padding:30px 20px 44px;text-align:center;
+}
+.sitemap{
+  list-style:none;display:flex;flex-wrap:wrap;justify-content:center;
+  gap:10px 22px;margin-bottom:18px;
+}
+.sitemap a{color:var(--muted-bright);text-decoration:none;font-size:var(--fs-sm)}
+.sitemap a:hover{color:var(--gold-bright)}
+.sitemap a:focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px;border-radius:4px}
+.copy{font-size:var(--fs-xs);color:var(--muted);letter-spacing:.04em;line-height:1.9}
+.copy a{color:var(--muted-bright);text-decoration:none;border-bottom:1px solid var(--line)}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{
     animation-duration:.01ms !important;animation-iteration-count:1 !important;
     transition-duration:.01ms !important;scroll-behavior:auto !important;
   }
 }
-
-/* ── Footer ───────────────────────── */
-footer{
-  margin-top:56px;text-align:center;
-  font-size:var(--fs-xs);color:var(--muted);
-  letter-spacing:.04em;
-}
-footer a{color:var(--muted-bright);text-decoration:none;border-bottom:1px solid var(--line)}
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <div class="kicker">Steven Music</div>
-  <h1>音樂<span>工具箱</span></h1>
-  <p>為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。</p>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="kicker">Steven Music</p>
+    <h1>音樂<span>工具箱</span></h1>
+    <p class="lede">為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。</p>
+    <ul class="badges">
+      <li>完全免費</li>
+      <li>免安裝</li>
+      <li>免註冊</li>
+      <li>開啟即用</li>
+    </ul>
+  </header>
+
+  <main class="grid">
+
+    <a class="card card--feature" href="ScrollScore/">
+      <div class="thumb">
+        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="橫向捲動的五線譜與鋼琴鍵盤示意">
+          <g stroke="#4A4028" stroke-width="1">
+            <line x1="16" y1="48" x2="304" y2="48"/><line x1="16" y1="58" x2="304" y2="58"/>
+            <line x1="16" y1="68" x2="304" y2="68"/><line x1="16" y1="78" x2="304" y2="78"/>
+            <line x1="16" y1="88" x2="304" y2="88"/>
+          </g>
+          <g stroke="#EFD48A" stroke-width="1.6" stroke-linecap="round">
+            <line x1="52" y1="78" x2="52" y2="52"/><line x1="82" y1="68" x2="82" y2="42"/>
+            <line x1="112" y1="58" x2="112" y2="32"/><line x1="142" y1="73" x2="142" y2="47"/>
+          </g>
+          <g fill="#EFD48A">
+            <ellipse cx="46" cy="78" rx="6" ry="4.4"/><ellipse cx="76" cy="68" rx="6" ry="4.4"/>
+            <ellipse cx="106" cy="58" rx="6" ry="4.4"/><ellipse cx="136" cy="73" rx="6" ry="4.4"/>
+          </g>
+          <g stroke="#8A7D5F" stroke-width="1.6" stroke-linecap="round">
+            <line x1="178" y1="63" x2="178" y2="37"/><line x1="208" y1="53" x2="208" y2="27"/>
+            <line x1="238" y1="68" x2="238" y2="42"/><line x1="268" y1="78" x2="268" y2="52"/>
+          </g>
+          <g fill="#8A7D5F">
+            <ellipse cx="172" cy="63" rx="6" ry="4.4"/><ellipse cx="202" cy="53" rx="6" ry="4.4"/>
+            <ellipse cx="232" cy="68" rx="6" ry="4.4"/><ellipse cx="262" cy="78" rx="6" ry="4.4"/>
+          </g>
+          <rect x="150" y="26" width="10" height="76" fill="#C9A24B" opacity=".14"/>
+          <line x1="155" y1="24" x2="155" y2="104" stroke="#EFD48A" stroke-width="1.6"/>
+          <g stroke="#4A4028" stroke-width="1">
+            <rect x="16" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+            <rect x="36" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+            <rect x="56" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+            <rect x="76" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+            <rect x="96" y="132" width="20" height="54" rx="3" fill="#C9A24B" fill-opacity=".45"/>
+            <rect x="116" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+            <rect x="136" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+            <rect x="156" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+            <rect x="176" y="132" width="20" height="54" rx="3" fill="#C9A24B" fill-opacity=".45"/>
+            <rect x="196" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+            <rect x="216" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+            <rect x="236" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+            <rect x="256" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+            <rect x="276" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+          </g>
+          <g fill="#0C0A07" stroke="#4A4028" stroke-width="1">
+            <rect x="30" y="132" width="12" height="34" rx="2"/><rect x="50" y="132" width="12" height="34" rx="2"/>
+            <rect x="90" y="132" width="12" height="34" rx="2"/><rect x="110" y="132" width="12" height="34" rx="2"/>
+            <rect x="130" y="132" width="12" height="34" rx="2" fill="#C9A24B" fill-opacity=".55"/>
+            <rect x="170" y="132" width="12" height="34" rx="2"/><rect x="190" y="132" width="12" height="34" rx="2"/>
+            <rect x="230" y="132" width="12" height="34" rx="2"/><rect x="250" y="132" width="12" height="34" rx="2"/>
+            <rect x="270" y="132" width="12" height="34" rx="2"/>
+          </g>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-head">
+          <span class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="16" r="3" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <h2>ScrollScore</h2>
+          <span class="tag">樂譜播放器</span>
+        </div>
+        <p class="desc">橫向捲動樂譜播放器，把譜面、鍵盤與節奏放在同一個畫面上，練習跟教學都不必再來回翻頁。</p>
+        <ul class="points">
+          <li>支援 MusicXML 匯入，自動排版並隨拍捲動</li>
+          <li>鋼琴鍵盤與鼓組即時視覺化</li>
+          <li>可匯出練習／教學影片</li>
+        </ul>
+        <p class="who">適合：鋼琴教師、自學者、教學影片創作者</p>
+        <span class="go">開始播放樂譜
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card card--sm" href="SightScore/">
+      <div class="thumb">
+        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="一疊自動生成的視奏練習譜示意">
+          <rect x="44" y="34" width="232" height="50" rx="9" fill="#201A0F" stroke="#2A2415" stroke-width="1"/>
+          <rect x="36" y="56" width="248" height="56" rx="10" fill="#1B1610" stroke="#332C1B" stroke-width="1"/>
+          <rect x="28" y="82" width="264" height="80" rx="11" fill="#141009" stroke="#4A4028" stroke-width="1"/>
+          <g stroke="#4A4028" stroke-width="1">
+            <line x1="46" y1="104" x2="274" y2="104"/><line x1="46" y1="113" x2="274" y2="113"/>
+            <line x1="46" y1="122" x2="274" y2="122"/><line x1="46" y1="131" x2="274" y2="131"/>
+            <line x1="46" y1="140" x2="274" y2="140"/>
+          </g>
+          <g stroke="#EFD48A" stroke-width="1.5" stroke-linecap="round">
+            <line x1="71" y1="140" x2="71" y2="118"/><line x1="101" y1="122" x2="101" y2="100"/>
+            <line x1="131" y1="131" x2="131" y2="109"/><line x1="161" y1="113" x2="161" y2="91"/>
+            <line x1="191" y1="122" x2="191" y2="100"/><line x1="221" y1="104" x2="221" y2="82"/>
+            <line x1="251" y1="113" x2="251" y2="91"/>
+          </g>
+          <g fill="#EFD48A">
+            <ellipse cx="66" cy="140" rx="5.4" ry="4"/><ellipse cx="96" cy="122" rx="5.4" ry="4"/>
+            <ellipse cx="126" cy="131" rx="5.4" ry="4"/><ellipse cx="156" cy="113" rx="5.4" ry="4"/>
+            <ellipse cx="186" cy="122" rx="5.4" ry="4"/><ellipse cx="216" cy="104" rx="5.4" ry="4"/>
+            <ellipse cx="246" cy="113" rx="5.4" ry="4"/>
+          </g>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-head">
+          <span class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.1" fill="currentColor" stroke="none"/><circle cx="16" cy="8" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r="1.1" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1.1" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <h2>SightScore</h2>
+          <span class="tag">視奏生成</span>
+        </div>
+        <p class="desc">依 ABRSM／Trinity 各級規則，程式化產生無限量視奏練習譜，適合每日練習與考前準備。</p>
+        <p class="who">適合：考級學生、需要出題的教師</p>
+        <span class="go">產生練習譜
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card card--sm" href="HarmonyMap/">
+      <div class="thumb">
+        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="五度圈與和弦關係視覺化示意">
+          <circle cx="160" cy="100" r="66" fill="none" stroke="#4A4028" stroke-width="1"/>
+          <circle cx="160" cy="100" r="50" fill="none" stroke="#2A2415" stroke-width="1"/>
+          <path d="M160 34 L217.2 133 L102.8 133 Z" fill="#C9A24B" fill-opacity=".08" stroke="#C9A24B" stroke-width="1.4" stroke-linejoin="round"/>
+          <g fill="#201A0F" stroke="#4A4028" stroke-width="1">
+            <circle cx="193" cy="42.8" r="6"/><circle cx="217.2" cy="67" r="6"/><circle cx="226" cy="100" r="6"/>
+            <circle cx="193" cy="157.2" r="6"/><circle cx="160" cy="166" r="6"/><circle cx="127" cy="157.2" r="6"/>
+            <circle cx="94" cy="100" r="6"/><circle cx="102.8" cy="67" r="6"/><circle cx="127" cy="42.8" r="6"/>
+          </g>
+          <g fill="#EFD48A">
+            <circle cx="160" cy="34" r="7.5"/><circle cx="217.2" cy="133" r="7.5"/><circle cx="102.8" cy="133" r="7.5"/>
+          </g>
+          <circle cx="160" cy="100" r="15" fill="#161209" stroke="#C9A24B" stroke-width="1"/>
+          <g fill="#C9A24B">
+            <circle cx="160" cy="94" r="2.2"/><circle cx="160" cy="100" r="2.2"/><circle cx="160" cy="106" r="2.2"/>
+          </g>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-head">
+          <span class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="18" rx="5" ry="3.2"/><ellipse cx="12" cy="12" rx="5" ry="3.2"/><ellipse cx="12" cy="6" rx="5" ry="3.2"/></svg>
+          </span>
+          <h2>HarmonyMap</h2>
+          <span class="tag">和聲樂理</span>
+        </div>
+        <p class="desc">互動式和弦與音階理論工具，視覺化調性關係，輔助創作、即興與樂理理解。</p>
+        <p class="who">適合：樂理學習者、編曲與即興演奏者</p>
+        <span class="go">探索和聲關係
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card card--sm" href="LoudNorm/">
+      <div class="thumb">
+        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="校正前後的音訊波形對照示意">
+          <g fill="#8A7D5F" fill-opacity=".55">
+            <rect x="36" y="60" width="8" height="80" rx="4"/><rect x="51" y="84" width="8" height="32" rx="4"/>
+            <rect x="66" y="46" width="8" height="108" rx="4"/><rect x="81" y="72" width="8" height="56" rx="4"/>
+            <rect x="96" y="38" width="8" height="124" rx="4"/><rect x="111" y="80" width="8" height="40" rx="4"/>
+            <rect x="126" y="54" width="8" height="92" rx="4"/><rect x="141" y="68" width="8" height="64" rx="4"/>
+          </g>
+          <line x1="163" y1="32" x2="163" y2="168" stroke="#4A4028" stroke-width="1" stroke-dasharray="4 4"/>
+          <g stroke="#C9A24B" stroke-width="1" stroke-dasharray="5 5" opacity=".7">
+            <line x1="172" y1="64" x2="292" y2="64"/><line x1="172" y1="136" x2="292" y2="136"/>
+          </g>
+          <g fill="#C9A24B">
+            <rect x="178" y="68" width="8" height="64" rx="4"/><rect x="193" y="65" width="8" height="70" rx="4"/>
+            <rect x="208" y="69" width="8" height="62" rx="4"/><rect x="223" y="66" width="8" height="68" rx="4"/>
+            <rect x="238" y="67" width="8" height="66" rx="4"/><rect x="253" y="65" width="8" height="70" rx="4"/>
+            <rect x="268" y="68" width="8" height="64" rx="4"/><rect x="283" y="66" width="8" height="68" rx="4"/>
+          </g>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-head">
+          <span class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17V8M12 20V4M19 17V8"/></svg>
+          </span>
+          <h2>LoudMaster</h2>
+          <span class="tag">音量正規化</span>
+        </div>
+        <p class="desc">將音訊／影片響度自動校正至 -14 LUFS 標準，適用於串流平台發布前處理，全程於瀏覽器端完成。</p>
+        <p class="who">適合：影音創作者、上架串流平台前的最後一關</p>
+        <span class="go">校正響度
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+  </main>
+
+  <section class="faq">
+    <h2 class="section-title">常見問題</h2>
+    <div class="faq-list">
+      <details>
+        <summary>需要付費或註冊嗎？</summary>
+        <p>不用。所有工具都是免費的網頁應用，不需要註冊帳號，也不用安裝任何軟體，用瀏覽器打開就能使用。</p>
+      </details>
+      <details>
+        <summary>我的檔案會被上傳到伺服器嗎？</summary>
+        <p>LoudMaster 的響度校正全程在瀏覽器端完成，音訊與影片檔案不會離開你的電腦。</p>
+      </details>
+      <details>
+        <summary>支援哪些樂譜格式？</summary>
+        <p>ScrollScore 支援 MusicXML 匯入；SightScore 則不需要匯入檔案，練習譜是依 ABRSM／Trinity 各級規則直接生成的。</p>
+      </details>
+      <details>
+        <summary>手機或平板可以用嗎？</summary>
+        <p>可以，頁面與工具都採響應式設計。不過影片匯出與音訊處理相當吃運算資源，這類操作建議在電腦上進行。</p>
+      </details>
+      <details>
+        <summary>發現問題或有功能建議？</summary>
+        <p>歡迎透過主網站 <a href="https://musicsteven.com" target="_blank" rel="noopener">musicsteven.com</a> 與我聯絡。</p>
+      </details>
+    </div>
+  </section>
+
 </div>
 
-<div class="grid">
-
-  <a class="card" href="ScrollScore/">
-    <div class="card-head">
-      <div class="icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="16" r="3" fill="currentColor" stroke="none"/></svg>
-      </div>
-      <h2>ScrollScore <span class="tag">樂譜播放器</span></h2>
-    </div>
-    <p>橫向捲動樂譜播放器，支援 MusicXML 匯入、鋼琴鍵盤與鼓組視覺化，並可匯出練習/教學影片。</p>
-    <div class="go">開啟工具
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </div>
-  </a>
-
-  <a class="card" href="SightScore/">
-    <div class="card-head">
-      <div class="icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.1" fill="currentColor" stroke="none"/><circle cx="16" cy="8" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r="1.1" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1.1" fill="currentColor" stroke="none"/></svg>
-      </div>
-      <h2>SightScore <span class="tag">視奏生成</span></h2>
-    </div>
-    <p>依 ABRSM／Trinity 各級規則，程式化產生無限量視奏練習譜，適合每日練習與考前準備。</p>
-    <div class="go">開啟工具
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </div>
-  </a>
-
-  <a class="card" href="HarmonyMap/">
-    <div class="card-head">
-      <div class="icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="18" rx="5" ry="3.2"/><ellipse cx="12" cy="12" rx="5" ry="3.2"/><ellipse cx="12" cy="6" rx="5" ry="3.2"/></svg>
-      </div>
-      <h2>HarmonyMap <span class="tag">和聲樂理</span></h2>
-    </div>
-    <p>互動式和弦與音階理論工具，視覺化調性關係，輔助創作、即興與樂理理解。</p>
-    <div class="go">開啟工具
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </div>
-  </a>
-
-  <a class="card" href="LoudNorm/">
-    <div class="card-head">
-      <div class="icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17V8M12 20V4M19 17V8"/></svg>
-      </div>
-      <h2>LoudMaster <span class="tag">音量正規化</span></h2>
-    </div>
-    <p>將音訊／影片響度自動校正至 -14 LUFS 標準，適用於串流平台發布前處理，全程於瀏覽器端完成。</p>
-    <div class="go">開啟工具
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </div>
-  </a>
-
-</div>
-
-<footer>musicsteven.com 開發 &middot; <a href="https://musicsteven.com" target="_blank" rel="noopener">前往主網站</a></footer>
+<footer>
+  <div class="wrap">
+    <ul class="sitemap">
+      <li><a href="ScrollScore/">ScrollScore</a></li>
+      <li><a href="SightScore/">SightScore</a></li>
+      <li><a href="HarmonyMap/">HarmonyMap</a></li>
+      <li><a href="LoudNorm/">LoudMaster</a></li>
+      <li><a href="https://musicsteven.com" target="_blank" rel="noopener">主網站</a></li>
+    </ul>
+    <p class="copy">musicsteven.com 開發 &middot; 最後更新 2026 年 8 月</p>
+  </div>
+</footer>
 
 </body>
 </html>
