@@ -97,11 +97,12 @@ body{
   box-shadow:var(--shadow-md);
 }
 .card:active::before{opacity:1}
+.card-head{display:flex;align-items:center;gap:12px}
 .card .icon{
   width:44px;height:44px;border-radius:var(--radius-md);
   background:var(--panel-2);border:1px solid var(--line);
   display:flex;align-items:center;justify-content:center;
-  color:var(--gold);flex:none;margin-bottom:4px;
+  color:var(--gold);flex:none;
 }
 .card .icon svg{width:22px;height:22px}
 .card h2{
@@ -146,10 +147,12 @@ footer a{color:var(--muted-bright);text-decoration:none;border-bottom:1px solid 
 <div class="grid">
 
   <a class="card" href="ScrollScore/">
-    <div class="icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="16" r="3" fill="currentColor" stroke="none"/></svg>
+    <div class="card-head">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="16" r="3" fill="currentColor" stroke="none"/></svg>
+      </div>
+      <h2>ScrollScore <span class="tag">樂譜播放器</span></h2>
     </div>
-    <h2>ScrollScore <span class="tag">樂譜播放器</span></h2>
     <p>橫向捲動樂譜播放器，支援 MusicXML 匯入、鋼琴鍵盤與鼓組視覺化，並可匯出練習/教學影片。</p>
     <div class="go">開啟工具
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -157,10 +160,12 @@ footer a{color:var(--muted-bright);text-decoration:none;border-bottom:1px solid 
   </a>
 
   <a class="card" href="SightScore/">
-    <div class="icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.1" fill="currentColor" stroke="none"/><circle cx="16" cy="8" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r="1.1" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1.1" fill="currentColor" stroke="none"/></svg>
+    <div class="card-head">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.1" fill="currentColor" stroke="none"/><circle cx="16" cy="8" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r="1.1" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </div>
+      <h2>SightScore <span class="tag">視奏生成</span></h2>
     </div>
-    <h2>SightScore <span class="tag">視奏生成</span></h2>
     <p>依 ABRSM／Trinity 各級規則，程式化產生無限量視奏練習譜，適合每日練習與考前準備。</p>
     <div class="go">開啟工具
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -168,10 +173,12 @@ footer a{color:var(--muted-bright);text-decoration:none;border-bottom:1px solid 
   </a>
 
   <a class="card" href="HarmonyMap/">
-    <div class="icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="18" rx="5" ry="3.2"/><ellipse cx="12" cy="12" rx="5" ry="3.2"/><ellipse cx="12" cy="6" rx="5" ry="3.2"/></svg>
+    <div class="card-head">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="18" rx="5" ry="3.2"/><ellipse cx="12" cy="12" rx="5" ry="3.2"/><ellipse cx="12" cy="6" rx="5" ry="3.2"/></svg>
+      </div>
+      <h2>HarmonyMap <span class="tag">和聲樂理</span></h2>
     </div>
-    <h2>HarmonyMap <span class="tag">和聲樂理</span></h2>
     <p>互動式和弦與音階理論工具，視覺化調性關係，輔助創作、即興與樂理理解。</p>
     <div class="go">開啟工具
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -179,10 +186,12 @@ footer a{color:var(--muted-bright);text-decoration:none;border-bottom:1px solid 
   </a>
 
   <a class="card" href="LoudNorm/">
-    <div class="icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17V8M12 20V4M19 17V8"/></svg>
+    <div class="card-head">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17V8M12 20V4M19 17V8"/></svg>
+      </div>
+      <h2>LoudMaster <span class="tag">音量正規化</span></h2>
     </div>
-    <h2>LoudMaster <span class="tag">音量正規化</span></h2>
     <p>將音訊／影片響度自動校正至 -14 LUFS 標準，適用於串流平台發布前處理，全程於瀏覽器端完成。</p>
     <div class="go">開啟工具
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
