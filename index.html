@@ -43,7 +43,9 @@
   --section-gap:clamp(52px, 8vw, 84px);
   color-scheme:dark;
 }
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+/* touch-action:manipulation 只關掉「雙擊放大」這個手勢,雙指縮放完全不受影響——
+   跟直接鎖 viewport 的 user-scalable=no 不一樣,那個連縮放需求的使用者也會一起擋掉 */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 html{-webkit-text-size-adjust:100%}
 body{
   min-height:100%;
@@ -70,6 +72,9 @@ body{
 .btn svg{flex:none}
 .btn:hover,.btn:focus-visible{background:var(--gold);color:var(--bg);outline:none}
 .btn:active{background:var(--gold);color:var(--bg)}
+/* min-width 要放在文字那個 span 上,不是按鈕本身——按鈕寬度是 icon+padding+文字撐出來的,
+   本來就比隨便設的 min-width 寬,放在按鈕上不會真的卡到任何東西 */
+#langToggle .btn-label{min-width:1.3em;text-align:center;display:inline-block}
 #langToggle[aria-pressed="true"]{background:var(--gold);color:var(--bg)}
 
 /* ── Hero ───────────────────────── */
@@ -193,6 +198,10 @@ body{
 }
 /* 手機再收一輪:縮圖已經在旁邊了,卡片標題再放一顆 34px 的 icon 只是多佔一行 */
 @media(max-width:559px){
+  /* badges 固定排成 2x2:原本用 flex-wrap 讓瀏覽器自動換行,中文 4 個字短、剛好擠進一行,
+     英文字長度不同,換行位置不可預期(3+1),兩種語言的版面高度會不一樣、下面整段跟著錯開。
+     固定 2 欄之後,不管中英文都是同樣的兩行兩欄,語言切換時這一區不會再位移 */
+  .badges{display:grid;grid-template-columns:1fr 1fr;justify-items:center;gap:8px;max-width:320px;margin-left:auto;margin-right:auto}
   .grid{gap:14px}
   .card--sm .thumb{width:42%}
   .card--sm .card-body{padding:15px}
