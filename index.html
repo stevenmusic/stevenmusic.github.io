@@ -56,6 +56,22 @@ body{
 }
 .wrap{max-width:1120px;margin:0 auto}
 
+/* ── 頂列(語言切換) ───────────────────────── */
+/* 首頁原本沒有任何 header/工具列,四個工具的 #langToggle 都活在一條 header 裡——
+   這裡就地補一條只放這顆按鈕的列,btn 樣式跟 LANG_KEY 都跟四個工具共用同一份定義 */
+.top-bar{display:flex;justify-content:flex-end;margin-bottom:clamp(18px, 3vw, 28px)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;line-height:1;
+  border:1px solid var(--gold);background:transparent;color:var(--gold);
+  font-family:inherit;font-size:var(--fs-md);font-weight:500;
+  padding:8px 16px;height:38px;border-radius:var(--radius-pill);cursor:pointer;
+  transition:background .2s,color .2s;white-space:nowrap;
+}
+.btn svg{flex:none}
+.btn:hover,.btn:focus-visible{background:var(--gold);color:var(--bg);outline:none}
+.btn:active{background:var(--gold);color:var(--bg)}
+#langToggle[aria-pressed="true"]{background:var(--gold);color:var(--bg)}
+
 /* ── Hero ───────────────────────── */
 .hero{text-align:center;max-width:680px;margin:0 auto clamp(30px, 5vw, 46px)}
 .hero .kicker{
@@ -65,10 +81,12 @@ body{
 .hero h1{
   font-family:"Noto Serif TC",serif;font-weight:700;
   font-size:clamp(32px, 8vw, 48px);
-  color:var(--gold-bright);letter-spacing:.02em;
+  /* --gold,不是 --gold-bright:四個工具的 header h1 都是這個色階,首頁大標題原本用了
+     更亮的 --gold-bright,跟工具頁的品牌字色不一致,並排看得出色差 */
+  color:var(--gold);letter-spacing:.02em;
   line-height:1.25;margin-bottom:16px;
 }
-.hero h1 span{color:var(--ivory)}
+.hero h1 .h1b{color:var(--ivory)}
 .hero .lede{font-size:var(--fs-lg);color:var(--muted-bright);line-height:1.75}
 /* 賣點從內文抽出來變成獨立的一排——埋在句子裡沒人讀得到 */
 .badges{
@@ -252,15 +270,24 @@ footer{
 
 <div class="wrap">
 
+  <div class="top-bar">
+    <button class="btn" id="langToggle" aria-pressed="false" data-i18n-attr="aria-label:langToggleLabel,title:langToggleTitle" aria-label="切換為英文" title="切換語言">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 010 18 15 15 0 010-18z"/>
+      </svg>
+      <span class="btn-label" id="langLabel" data-i18n="langToggleText">EN</span>
+    </button>
+  </div>
+
   <header class="hero">
     <p class="kicker">Steven Music</p>
-    <h1>音樂<span>工具箱</span></h1>
-    <p class="lede">為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。</p>
+    <h1><span data-i18n="heroH1a">音樂</span><span class="h1b" data-i18n="heroH1b">工具箱</span></h1>
+    <p class="lede" data-i18n="lede">為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。</p>
     <ul class="badges">
-      <li>完全免費</li>
-      <li>免安裝</li>
-      <li>免註冊</li>
-      <li>開啟即用</li>
+      <li data-i18n="badge1">完全免費</li>
+      <li data-i18n="badge2">免安裝</li>
+      <li data-i18n="badge3">免註冊</li>
+      <li data-i18n="badge4">開啟即用</li>
     </ul>
   </header>
 
@@ -324,16 +351,16 @@ footer{
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="16" r="3" fill="currentColor" stroke="none"/></svg>
           </span>
           <h2>ScrollScore</h2>
-          <span class="tag">樂譜播放器</span>
+          <span class="tag" data-i18n="tag1">樂譜播放器</span>
         </div>
-        <p class="desc">橫向捲動樂譜播放器，把譜面、鍵盤與節奏放在同一個畫面上，練習跟教學都不必再來回翻頁。</p>
+        <p class="desc" data-i18n="desc1">橫向捲動樂譜播放器，把譜面、鍵盤與節奏放在同一個畫面上，練習跟教學都不必再來回翻頁。</p>
         <ul class="points">
-          <li>支援 MusicXML 匯入，自動排版並隨拍捲動</li>
-          <li>鋼琴鍵盤與鼓組即時視覺化</li>
-          <li>可匯出練習／教學影片</li>
+          <li data-i18n="point1a">支援 MusicXML 匯入，自動排版並隨拍捲動</li>
+          <li data-i18n="point1b">鋼琴鍵盤與鼓組即時視覺化</li>
+          <li data-i18n="point1c">可匯出練習／教學影片</li>
         </ul>
-        <p class="who">適合：鋼琴教師、自學者、教學影片創作者</p>
-        <span class="go">開始播放樂譜
+        <p class="who" data-i18n="who1">適合：鋼琴教師、自學者、教學影片創作者</p>
+        <span class="go"><span data-i18n="cta1">開始播放樂譜</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </div>
@@ -370,11 +397,11 @@ footer{
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.1" fill="currentColor" stroke="none"/><circle cx="16" cy="8" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r="1.1" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1.1" fill="currentColor" stroke="none"/></svg>
           </span>
           <h2>SightScore</h2>
-          <span class="tag">視奏生成</span>
+          <span class="tag" data-i18n="tag2">視奏生成</span>
         </div>
-        <p class="desc">依 ABRSM／Trinity 各級規則，程式化產生無限量視奏練習譜，適合每日練習與考前準備。</p>
-        <p class="who">適合：考級學生、需要出題的教師</p>
-        <span class="go">產生練習譜
+        <p class="desc" data-i18n="desc2">依 ABRSM／Trinity 各級規則，程式化產生無限量視奏練習譜，適合每日練習與考前準備。</p>
+        <p class="who" data-i18n="who2">適合：考級學生、需要出題的教師</p>
+        <span class="go"><span data-i18n="cta2">產生練習譜</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </div>
@@ -406,11 +433,11 @@ footer{
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="18" rx="5" ry="3.2"/><ellipse cx="12" cy="12" rx="5" ry="3.2"/><ellipse cx="12" cy="6" rx="5" ry="3.2"/></svg>
           </span>
           <h2>HarmonyMap</h2>
-          <span class="tag">和聲樂理</span>
+          <span class="tag" data-i18n="tag3">和聲樂理</span>
         </div>
-        <p class="desc">互動式和弦與音階理論工具，視覺化調性關係，輔助創作、即興與樂理理解。</p>
-        <p class="who">適合：樂理學習者、編曲與即興演奏者</p>
-        <span class="go">探索和聲關係
+        <p class="desc" data-i18n="desc3">互動式和弦與音階理論工具，視覺化調性關係，輔助創作、即興與樂理理解。</p>
+        <p class="who" data-i18n="who3">適合：樂理學習者、編曲與即興演奏者</p>
+        <span class="go"><span data-i18n="cta3">探索和聲關係</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </div>
@@ -443,11 +470,11 @@ footer{
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17V8M12 20V4M19 17V8"/></svg>
           </span>
           <h2>LoudMaster</h2>
-          <span class="tag">音量正規化</span>
+          <span class="tag" data-i18n="tag4">音量正規化</span>
         </div>
-        <p class="desc">將音訊／影片響度自動校正至 -14 LUFS 標準，適用於串流平台發布前處理，全程於瀏覽器端完成。</p>
-        <p class="who">適合：影音創作者、上架串流平台前的最後一關</p>
-        <span class="go">校正響度
+        <p class="desc" data-i18n="desc4">將音訊／影片響度自動校正至 -14 LUFS 標準，適用於串流平台發布前處理，全程於瀏覽器端完成。</p>
+        <p class="who" data-i18n="who4">適合：影音創作者、上架串流平台前的最後一關</p>
+        <span class="go"><span data-i18n="cta4">校正響度</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </div>
@@ -456,27 +483,27 @@ footer{
   </main>
 
   <section class="faq">
-    <h2 class="section-title">常見問題</h2>
+    <h2 class="section-title" data-i18n="faqTitle">常見問題</h2>
     <div class="faq-list">
       <details>
-        <summary>需要付費或註冊嗎？</summary>
-        <p>不用。所有工具都是免費的網頁應用，不需要註冊帳號，也不用安裝任何軟體，用瀏覽器打開就能使用。</p>
+        <summary data-i18n="q1">需要付費或註冊嗎？</summary>
+        <p data-i18n="a1">不用。所有工具都是免費的網頁應用，不需要註冊帳號，也不用安裝任何軟體，用瀏覽器打開就能使用。</p>
       </details>
       <details>
-        <summary>我的檔案會被上傳到伺服器嗎？</summary>
-        <p>LoudMaster 的響度校正全程在瀏覽器端完成，音訊與影片檔案不會離開你的電腦。</p>
+        <summary data-i18n="q2">我的檔案會被上傳到伺服器嗎？</summary>
+        <p data-i18n="a2">LoudMaster 的響度校正全程在瀏覽器端完成，音訊與影片檔案不會離開你的電腦。</p>
       </details>
       <details>
-        <summary>支援哪些樂譜格式？</summary>
-        <p>ScrollScore 支援 MusicXML 匯入；SightScore 則不需要匯入檔案，練習譜是依 ABRSM／Trinity 各級規則直接生成的。</p>
+        <summary data-i18n="q3">支援哪些樂譜格式？</summary>
+        <p data-i18n="a3">ScrollScore 支援 MusicXML 匯入；SightScore 則不需要匯入檔案，練習譜是依 ABRSM／Trinity 各級規則直接生成的。</p>
       </details>
       <details>
-        <summary>手機或平板可以用嗎？</summary>
-        <p>可以，頁面與工具都採響應式設計。不過影片匯出與音訊處理相當吃運算資源，這類操作建議在電腦上進行。</p>
+        <summary data-i18n="q4">手機或平板可以用嗎？</summary>
+        <p data-i18n="a4">可以，頁面與工具都採響應式設計。不過影片匯出與音訊處理相當吃運算資源，這類操作建議在電腦上進行。</p>
       </details>
       <details>
-        <summary>發現問題或有功能建議？</summary>
-        <p>歡迎透過主網站 <a href="https://musicsteven.com" target="_blank" rel="noopener">musicsteven.com</a> 與我聯絡。</p>
+        <summary data-i18n="q5">發現問題或有功能建議？</summary>
+        <p data-i18n-html="a5">歡迎透過主網站 <a href="https://musicsteven.com" target="_blank" rel="noopener">musicsteven.com</a> 與我聯絡。</p>
       </details>
     </div>
   </section>
@@ -490,11 +517,143 @@ footer{
       <li><a href="SightScore/">SightScore</a></li>
       <li><a href="HarmonyMap/">HarmonyMap</a></li>
       <li><a href="LoudNorm/">LoudMaster</a></li>
-      <li><a href="https://musicsteven.com" target="_blank" rel="noopener">主網站</a></li>
+      <li><a href="https://musicsteven.com" target="_blank" rel="noopener" data-i18n="footerMainSite">主網站</a></li>
     </ul>
-    <p class="copy">musicsteven.com 開發 &middot; 最後更新 2026 年 8 月</p>
+    <p class="copy" data-i18n="footerCopy">musicsteven.com 開發 &middot; 最後更新 2026 年 8 月</p>
   </div>
 </footer>
+
+<script>
+// 跟 ScrollScore / SightScore / HarmonyMap / LoudMaster 共用同一把 localStorage key,
+// 使用者在任一工具切過語言,回到首頁或開其他工具時偏好會延續。
+const LANG_KEY = "sm_lang";
+
+const I18N = {
+  zh: {
+    pageTitle: "Steven Music — 音樂工具箱",
+    metaDescription: "為鋼琴教學、樂理練習與影音製作打造的免費網頁工具：捲動樂譜播放器、視奏題庫生成、和聲樂理視覺化、音訊響度正規化。免安裝、免註冊，開啟即用。",
+    ogTitle: "Steven Music — 音樂工具箱",
+    ogDescription: "為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。",
+    langToggleText: "EN", langToggleLabel: "切換為英文", langToggleTitle: "切換語言",
+    heroH1a: "音樂", heroH1b: "工具箱",
+    lede: "為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。",
+    badge1: "完全免費", badge2: "免安裝", badge3: "免註冊", badge4: "開啟即用",
+    tag1: "樂譜播放器",
+    desc1: "橫向捲動樂譜播放器，把譜面、鍵盤與節奏放在同一個畫面上，練習跟教學都不必再來回翻頁。",
+    point1a: "支援 MusicXML 匯入，自動排版並隨拍捲動",
+    point1b: "鋼琴鍵盤與鼓組即時視覺化",
+    point1c: "可匯出練習／教學影片",
+    who1: "適合：鋼琴教師、自學者、教學影片創作者",
+    cta1: "開始播放樂譜",
+    tag2: "視奏生成",
+    desc2: "依 ABRSM／Trinity 各級規則，程式化產生無限量視奏練習譜，適合每日練習與考前準備。",
+    who2: "適合：考級學生、需要出題的教師",
+    cta2: "產生練習譜",
+    tag3: "和聲樂理",
+    desc3: "互動式和弦與音階理論工具，視覺化調性關係，輔助創作、即興與樂理理解。",
+    who3: "適合：樂理學習者、編曲與即興演奏者",
+    cta3: "探索和聲關係",
+    tag4: "音量正規化",
+    desc4: "將音訊／影片響度自動校正至 -14 LUFS 標準，適用於串流平台發布前處理，全程於瀏覽器端完成。",
+    who4: "適合：影音創作者、上架串流平台前的最後一關",
+    cta4: "校正響度",
+    faqTitle: "常見問題",
+    q1: "需要付費或註冊嗎？",
+    a1: "不用。所有工具都是免費的網頁應用，不需要註冊帳號，也不用安裝任何軟體，用瀏覽器打開就能使用。",
+    q2: "我的檔案會被上傳到伺服器嗎？",
+    a2: "LoudMaster 的響度校正全程在瀏覽器端完成，音訊與影片檔案不會離開你的電腦。",
+    q3: "支援哪些樂譜格式？",
+    a3: "ScrollScore 支援 MusicXML 匯入；SightScore 則不需要匯入檔案，練習譜是依 ABRSM／Trinity 各級規則直接生成的。",
+    q4: "手機或平板可以用嗎？",
+    a4: "可以，頁面與工具都採響應式設計。不過影片匯出與音訊處理相當吃運算資源，這類操作建議在電腦上進行。",
+    q5: "發現問題或有功能建議？",
+    a5: '歡迎透過主網站 <a href="https://musicsteven.com" target="_blank" rel="noopener">musicsteven.com</a> 與我聯絡。',
+    footerMainSite: "主網站",
+    footerCopy: "musicsteven.com 開發 · 最後更新 2026 年 8 月",
+  },
+  en: {
+    pageTitle: "Steven Music — Music Toolbox",
+    metaDescription: "Free web tools for piano teaching, theory practice, and audio production: a scrolling score player, sight-reading generator, harmony visualizer, and loudness normalizer. No install, no sign-up — just open and use.",
+    ogTitle: "Steven Music — Music Toolbox",
+    ogDescription: "A free suite of web tools for piano teaching, theory practice, and audio production. No install required.",
+    langToggleText: "中", langToggleLabel: "Switch to Chinese", langToggleTitle: "Switch language",
+    heroH1a: "Music ", heroH1b: "Toolbox",
+    lede: "A free suite of web tools for piano teaching, theory practice, and audio production — no install required, just open and use.",
+    badge1: "100% Free", badge2: "No Install", badge3: "No Sign-up", badge4: "Instant Access",
+    tag1: "Score Player",
+    desc1: "A horizontal scrolling score player that puts the sheet music, keyboard, and rhythm on one screen — no more flipping pages while practicing or teaching.",
+    point1a: "Imports MusicXML, auto-formats it, and scrolls in time with the beat",
+    point1b: "Live piano keyboard and drum visualization",
+    point1c: "Export practice or teaching videos",
+    who1: "For: piano teachers, self-learners, teaching-video creators",
+    cta1: "Start playing",
+    tag2: "Sight-reading Generator",
+    desc2: "Generates unlimited sight-reading practice sheets by ABRSM/Trinity grade rules — ideal for daily practice and exam prep.",
+    who2: "For: exam candidates, teachers who need practice material",
+    cta2: "Generate a sheet",
+    tag3: "Harmony & Theory",
+    desc3: "An interactive chord and scale theory tool that visualizes key relationships — for composing, improvising, and understanding harmony.",
+    who3: "For: theory students, arrangers, improvisers",
+    cta3: "Explore harmony",
+    tag4: "Loudness Normalizer",
+    desc4: "Automatically normalizes audio/video loudness to -14 LUFS for streaming platforms — entirely in your browser.",
+    who4: "For: content creators, the last step before publishing",
+    cta4: "Normalize loudness",
+    faqTitle: "FAQ",
+    q1: "Do I need to pay or sign up?",
+    a1: "No. Every tool is a free web app — no account, no software to install. Just open it in your browser.",
+    q2: "Are my files uploaded to a server?",
+    a2: "LoudMaster's loudness correction runs entirely in your browser — your audio and video files never leave your computer.",
+    q3: "What score formats are supported?",
+    a3: "ScrollScore imports MusicXML. SightScore doesn't need a file at all — it generates practice sheets directly from ABRSM/Trinity grade rules.",
+    q4: "Does it work on phone or tablet?",
+    a4: "Yes, the site and tools are all responsive. Video export and audio processing are resource-intensive, though, so a computer is recommended for those.",
+    q5: "Found a bug or have a feature idea?",
+    a5: 'Reach me through the main site at <a href="https://musicsteven.com" target="_blank" rel="noopener">musicsteven.com</a>.',
+    footerMainSite: "Main site",
+    footerCopy: "Built by musicsteven.com · Last updated August 2026",
+  },
+};
+
+function applyLanguage(lang) {
+  const dict = I18N[lang];
+  document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+
+  document.title = dict.pageTitle;
+  document.querySelector('meta[name="description"]').setAttribute("content", dict.metaDescription);
+  document.querySelector('meta[property="og:title"]').setAttribute("content", dict.ogTitle);
+  document.querySelector('meta[property="og:description"]').setAttribute("content", dict.ogDescription);
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (dict[key] != null) el.textContent = dict[key];
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach(el => {
+    const key = el.getAttribute("data-i18n-html");
+    if (dict[key] != null) el.innerHTML = dict[key];
+  });
+  document.querySelectorAll("[data-i18n-attr]").forEach(el => {
+    el.getAttribute("data-i18n-attr").split(",").forEach(pair => {
+      const [attr, key] = pair.split(":");
+      if (dict[key] != null) el.setAttribute(attr, dict[key]);
+    });
+  });
+
+  const lt = document.getElementById("langToggle");
+  lt.setAttribute("aria-pressed", lang === "en" ? "true" : "false");
+
+  try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
+}
+
+let currentLang = "zh";
+try { currentLang = localStorage.getItem(LANG_KEY) === "en" ? "en" : "zh"; } catch (e) {}
+applyLanguage(currentLang);
+
+document.getElementById("langToggle").addEventListener("click", () => {
+  currentLang = currentLang === "zh" ? "en" : "zh";
+  applyLanguage(currentLang);
+});
+</script>
 
 </body>
 </html>
