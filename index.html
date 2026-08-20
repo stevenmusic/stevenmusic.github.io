@@ -151,7 +151,7 @@ body{
 
 /* 首屏的產品畫面:ScrollScore 載入範例樂譜、播放中的實際畫面 */
 .hero-media{
-  border:1px solid var(--line);border-radius:var(--radius-lg);
+  border:1px solid var(--line-bright);border-radius:var(--radius-lg);
   background:linear-gradient(160deg, var(--panel-2), #14100A);
   overflow:hidden;box-shadow:var(--shadow-md);
 }
@@ -164,13 +164,10 @@ body{
   margin-left:8px;font-size:var(--fs-2xs);color:var(--muted);letter-spacing:.06em;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
-/* height:auto 不能省——img 上的 height="834" 屬性會變成 height:834px 的樣式提示,
-   而 aspect-ratio 只有在 height 是 auto 時才拿來推算高度,不然整張圖會撐成 750px 高。
+/* height:auto 不能省——img 上的 height 屬性會變成同值的樣式提示,而 aspect-ratio
+   只有在 height 是 auto 時才拿來推算高度,不然整張圖會被撐成那個像素高度。
    width/height 屬性本身要留著,瀏覽器才能在圖載入前就保留正確的版位 */
-.hero-media .shot{display:block;width:100%;height:auto;aspect-ratio:59 / 41;object-fit:cover}
-/* 匯出畫格是 16:9 的影片畫面,不是 app 截圖。用 contain 讓它在框裡保持完整比例,
-   上下自然留出黑邊——那正是影片播放器該有的樣子,裁掉標題或浮水印反而不對 */
-.hero-media .shot--video{object-fit:contain;background:#0b0906}
+.hero-media .shot{display:block;width:100%;height:auto;aspect-ratio:16 / 9;object-fit:cover}
 
 /* ── 工具卡片網格 ───────────────────────── */
 .tools{margin-top:var(--section-gap)}
@@ -203,14 +200,16 @@ body{
   .card:hover .go svg{transform:translateX(4px)}
 }
 
-/* 預覽區:preview/ 底下每個工具各一組 zh/en 截圖,語言切換時由 applyLanguage 換 src */
+/* 預覽區:preview/ 底下每個工具各一組 zh/en 截圖,語言切換時由 applyLanguage 換 src。
+   16:9 —— 橫式截圖與 ScrollScore 的匯出畫格都是這個比例,整頁只有一種版位比例 */
 .thumb{
   position:relative;flex:none;
   background:linear-gradient(160deg, var(--panel-2), #14100A);
   border-bottom:1px solid var(--line);
-  /* 59:41 = 截圖來源的 1180x820(平板橫式)。版位比例跟來源一致,object-fit:cover
-     才不會裁掉工具的標題列或底部 */
-  aspect-ratio:59 / 41;overflow:hidden;
+  aspect-ratio:16 / 9;overflow:hidden;
+  /* 截圖幾乎都是深色,擺在同樣深色的卡片裡看不出邊界在哪。用 inset ring 把畫面
+     框出來,而不是加 border——border 會改變 .thumb 的尺寸,連帶影響 flex 寬度計算 */
+  box-shadow:inset 0 0 0 1px var(--line-bright);
 }
 .thumb svg,.thumb img{
   display:block;width:100%;height:100%;object-fit:cover;
@@ -259,10 +258,12 @@ body{
 .card:active .go svg{transform:translateX(3px)}
 
 /* 小卡改成左圖右文:四張全寬預覽圖疊起來,手機頁面會從 1.3 個螢幕長到 3.2 個 */
+/* 小卡在這個斷點改成左圖右文。橫式截圖塞進 38% 寬的欄位裡會小到看不出是什麼,
+   所以這裡換成直式截圖(<picture> 的 source 負責換檔,見 HTML),版位也跟著轉成 3:4 */
 @media(max-width:899px){
   .card--sm{flex-direction:row}
   .card--sm .thumb{
-    width:38%;aspect-ratio:auto;
+    width:38%;aspect-ratio:3 / 4;
     border-bottom:none;border-right:1px solid var(--line);
   }
 }
@@ -275,7 +276,7 @@ body{
   .card--sm .who{display:none}
   .card--sm h2{font-size:var(--fs-lg)}
   .card--sm .go{padding-top:14px}
-  .card--feature .thumb{aspect-ratio:59 / 41}
+  .card--feature .thumb{aspect-ratio:16 / 9}
   .card--feature .card-body{padding:18px}
   .card--feature .who{display:none}
 }
@@ -409,7 +410,7 @@ footer{
 
     <figure class="hero-media">
       <div class="chrome"><i></i><i></i><i></i><span data-i18n="heroShotCaption">ScrollScore 匯出的影片</span></div>
-      <img class="shot shot--video" data-shot="scrollscore-export" src="preview/scrollscore-export-zh.webp"
+      <img class="shot" src="preview/scrollscore-export.webp"
            width="1280" height="720" fetchpriority="high" decoding="async"
            data-i18n-attr="alt:altExport" alt="ScrollScore 匯出的 1920x1080 影片畫格：白底樂譜、播放游標、下方鋼琴鍵盤，上方是曲名、右下角是頻道浮水印">
     </figure>
@@ -423,7 +424,7 @@ footer{
 
     <a class="card card--feature" href="ScrollScore/">
       <div class="thumb">
-        <img data-shot="scrollscore" src="preview/scrollscore-zh.webp" width="1200" height="834"
+        <img data-shot="scrollscore" src="preview/scrollscore-zh.webp" width="1280" height="720"
              loading="lazy" decoding="async"
              data-i18n-attr="alt:altScrollScore" alt="ScrollScore 操作畫面：樂譜隨拍捲動，鋼琴鍵盤同步標示按下的音">
       </div>
@@ -450,9 +451,13 @@ footer{
 
     <a class="card card--sm" href="SightScore/">
       <div class="thumb">
-        <img data-shot="sightscore" src="preview/sightscore-zh.webp" width="1200" height="834"
+        <picture>
+          <!-- 手機把小卡排成左圖右文,橫式截圖擠在窄欄裡看不出是什麼,換成直式 -->
+          <source media="(max-width: 899px)" data-shot="sightscore-portrait" srcset="preview/sightscore-portrait-zh.webp" width="720" height="960">
+          <img data-shot="sightscore" src="preview/sightscore-zh.webp" width="1280" height="720"
              loading="lazy" decoding="async"
              data-i18n-attr="alt:altSightScore" alt="SightScore 操作畫面：依級數與調性生成的視奏練習譜">
+        </picture>
       </div>
       <div class="card-body">
         <div class="card-head">
@@ -472,9 +477,13 @@ footer{
 
     <a class="card card--sm" href="HarmonyMap/">
       <div class="thumb">
-        <img data-shot="harmonymap" src="preview/harmonymap-zh.webp" width="1200" height="834"
+        <picture>
+          <!-- 手機把小卡排成左圖右文,橫式截圖擠在窄欄裡看不出是什麼,換成直式 -->
+          <source media="(max-width: 899px)" data-shot="harmonymap-portrait" srcset="preview/harmonymap-portrait-zh.webp" width="720" height="960">
+          <img data-shot="harmonymap" src="preview/harmonymap-zh.webp" width="1280" height="720"
              loading="lazy" decoding="async"
              data-i18n-attr="alt:altHarmonyMap" alt="HarmonyMap 操作畫面：Cmaj7 的組成音標示在鍵盤上，旁邊列出和弦資訊與可搭配的音階">
+        </picture>
       </div>
       <div class="card-body">
         <div class="card-head">
@@ -494,9 +503,13 @@ footer{
 
     <a class="card card--sm" href="LoudNorm/">
       <div class="thumb">
-        <img data-shot="loudnorm" src="preview/loudnorm-zh.webp" width="1200" height="834"
+        <picture>
+          <!-- 手機把小卡排成左圖右文,橫式截圖擠在窄欄裡看不出是什麼,換成直式 -->
+          <source media="(max-width: 899px)" data-shot="loudnorm-portrait" srcset="preview/loudnorm-portrait-zh.webp" width="720" height="960">
+          <img data-shot="loudnorm" src="preview/loudnorm-zh.webp" width="1280" height="720"
              loading="lazy" decoding="async"
              data-i18n-attr="alt:altLoudNorm" alt="LoudMaster 操作畫面：響度從 -17.8 校正到 -14.3 LUFS 的前後對照">
+        </picture>
       </div>
       <div class="card-body">
         <div class="card-head">
@@ -699,7 +712,9 @@ function applyLanguage(lang) {
   // 截圖是四個工具的實際畫面,裡面的介面文字就是該語言的版本,所以要跟著整頁一起換,
   // 不然中文頁面會配到一張英文介面的圖
   document.querySelectorAll("[data-shot]").forEach(el => {
-    el.src = "preview/" + el.dataset.shot + "-" + lang + ".webp";
+    const url = "preview/" + el.dataset.shot + "-" + lang + ".webp";
+    // <picture> 裡的 <source> 吃 srcset,只改 <img> 的 src 在手機上不會生效
+    if (el.tagName === "SOURCE") el.srcset = url; else el.src = url;
   });
 
   const lt = document.getElementById("langToggle");
