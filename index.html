@@ -446,8 +446,10 @@ footer{
       <p class="lede" data-i18n="lede">為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。</p>
       <p class="hero-meta" data-i18n="heroMeta">完全免費 · 免安裝 · 免註冊 · 開啟即用</p>
       <div class="hero-cta">
-        <a class="btn btn--primary" href="ScrollScore/">
-          <span data-i18n="heroCtaMain">開啟 ScrollScore</span>
+        <!-- 文字與 href 會跟著輪播目前那一張換,見 syncHeroCaption()。這裡寫死的是
+             第一張(ScrollScore)的值,JS 沒跑起來時也還是一顆能用的按鈕 -->
+        <a class="btn btn--primary" id="heroCtaMain" href="ScrollScore/">
+          <span id="heroCtaMainText">開啟 ScrollScore</span>
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
         <a class="btn" href="#tools" data-i18n="heroCtaAlt">看四個工具</a>
@@ -461,19 +463,19 @@ footer{
         <div class="carousel" id="heroCarousel" tabindex="0" role="group"
              aria-roledescription="carousel" data-i18n-attr="aria-label:heroCarouselLabel"
              aria-label="四個工具的畫面，可左右滑動">
-        <div class="slide" data-cap="heroCap1">
+        <div class="slide" data-cap="heroCap1" data-tool="ScrollScore" data-href="ScrollScore/">
           <img class="shot" src="preview/scrollscore-export.webp" width="1280" height="720" fetchpriority="high" decoding="async"
                data-i18n-attr="alt:altExport" alt="ScrollScore 匯出的 1920×1080 影片畫格：白底樂譜隨拍捲動，播放游標與小節色塊標出目前位置，下方鋼琴鍵盤同步亮起按著的音，上方是曲名與作者、右下角是頻道浮水印">
         </div>
-        <div class="slide" data-cap="heroCap2">
+        <div class="slide" data-cap="heroCap2" data-tool="SightScore" data-href="SightScore/">
           <img class="shot" data-shot="sightscore" src="preview/sightscore-zh.webp" width="1280" height="720" decoding="async"
                data-i18n-attr="alt:altSightScore" alt="SightScore 操作畫面：依級數與調性生成的視奏練習譜">
         </div>
-        <div class="slide" data-cap="heroCap3">
+        <div class="slide" data-cap="heroCap3" data-tool="HarmonyMap" data-href="HarmonyMap/">
           <img class="shot" data-shot="harmonymap" src="preview/harmonymap-zh.webp" width="1280" height="720" decoding="async"
                data-i18n-attr="alt:altHarmonyMap" alt="HarmonyMap 操作畫面：Cmaj7 的組成音標示在鍵盤上，旁邊列出和弦資訊與可搭配的音階">
         </div>
-        <div class="slide" data-cap="heroCap4">
+        <div class="slide" data-cap="heroCap4" data-tool="LoudMaster" data-href="LoudNorm/">
           <img class="shot" data-shot="loudnorm" src="preview/loudnorm-zh.webp" width="1280" height="720" decoding="async"
                data-i18n-attr="alt:altLoudNorm" alt="LoudMaster 操作畫面：響度從 -17.8 校正到 -14.3 LUFS 的前後對照">
         </div>
@@ -665,7 +667,7 @@ const I18N = {
     heroH1a: "音樂", heroH1b: "工具箱",
     lede: "為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。",
     heroMeta: "完全免費 · 免安裝 · 免註冊 · 開啟即用",
-    heroCtaMain: "開啟 ScrollScore", heroCtaAlt: "看四個工具",
+    heroCtaMain: "開啟 {tool}", heroCtaAlt: "看四個工具",
     toolsTitle: "四個工具",
     heroCarouselLabel: "四個工具的畫面，可左右滑動",
     heroPrevLabel: "上一張", heroNextLabel: "下一張",
@@ -722,7 +724,7 @@ const I18N = {
     heroH1a: "Music ", heroH1b: "Toolbox",
     lede: "A free suite of web tools for piano teaching, theory practice, and audio production — no install required, just open and use.",
     heroMeta: "100% free · No install · No sign-up · Instant access",
-    heroCtaMain: "Open ScrollScore", heroCtaAlt: "See all four tools",
+    heroCtaMain: "Open {tool}", heroCtaAlt: "See all four tools",
     toolsTitle: "Four tools",
     heroCarouselLabel: "Screens from the four tools, swipe left and right",
     heroPrevLabel: "Previous", heroNextLabel: "Next",
@@ -841,6 +843,16 @@ function syncHeroCaption(lang){
   const cap = document.getElementById("heroCaption");
   const key = slides[i] && slides[i].dataset.cap;
   if (cap && dict[key]) cap.textContent = dict[key];
+
+  /* 主 CTA 跟著目前這一張走。只換文字不換 href 的話,按鈕會寫著「開啟 SightScore」
+     卻連到 ScrollScore —— 那比不換還糟 */
+  const btn = document.getElementById("heroCtaMain");
+  const btnText = document.getElementById("heroCtaMainText");
+  const cur = slides[i];
+  if (btn && btnText && cur && cur.dataset.tool) {
+    btnText.textContent = (dict.heroCtaMain || "{tool}").replace("{tool}", cur.dataset.tool);
+    btn.setAttribute("href", cur.dataset.href);
+  }
   document.querySelectorAll("#heroDots .cdot").forEach((d, n) => {
     d.setAttribute("aria-current", String(n === i));
     const k = slides[n] && slides[n].dataset.cap;
