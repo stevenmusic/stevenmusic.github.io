@@ -149,7 +149,7 @@ body{
 .hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:clamp(22px, 3vw, 30px)}
 .hero-cta .btn{height:46px;padding:12px 24px;font-size:var(--fs-lg)}
 
-/* 首屏的產品畫面:ScrollScore 載入範例樂譜、播放中的實際畫面 */
+/* 首屏的產品畫面:四個工具各一張,可以左右滑 */
 .hero-media{
   border:1px solid var(--line-bright);border-radius:var(--radius-lg);
   background:linear-gradient(160deg, var(--panel-2), #14100A);
@@ -168,6 +168,52 @@ body{
    只有在 height 是 auto 時才拿來推算高度,不然整張圖會被撐成那個像素高度。
    width/height 屬性本身要留著,瀏覽器才能在圖載入前就保留正確的版位 */
 .hero-media .shot{display:block;width:100%;height:auto;aspect-ratio:16 / 9;object-fit:cover}
+
+/* 輪播:用原生的 scroll-snap,不自己接手勢。手指滑、觸控板兩指滑、focus 之後按方向鍵
+   都是瀏覽器本來就會的事,JS 只負責同步圓點與說明文字。沒有 JS 也還是能滑 */
+.carousel-wrap{position:relative}
+.carousel{
+  display:flex;overflow-x:auto;
+  scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  /* 橫向滑到底時不要把捲動交還給頁面,不然滑最後一張會意外往下捲 */
+  overscroll-behavior-x:contain;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.carousel::-webkit-scrollbar{display:none}
+.carousel:focus-visible{outline:2px solid var(--gold-bright);outline-offset:-3px}
+.slide{flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always}
+
+/* 左右鍵只給有滑鼠的裝置——觸控裝置本來就用滑的,多兩顆浮在畫面上的按鈕只是擋住內容 */
+.cnav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:34px;height:34px;border-radius:50%;padding:0;
+  display:none;align-items:center;justify-content:center;
+  background:rgba(12,10,7,.66);border:1px solid var(--line-bright);
+  color:var(--ivory);cursor:pointer;z-index:2;
+  -webkit-appearance:none;appearance:none;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  transition:background .2s,border-color .2s,opacity .2s;
+}
+@media (hover:hover) and (pointer:fine){.cnav{display:flex}}
+.cnav:hover:not(:disabled){background:var(--gold);border-color:var(--gold);color:var(--bg)}
+.cnav:focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px}
+.cnav:disabled{opacity:.28;cursor:default}
+.cnav svg{width:16px;height:16px}
+.cnav--prev{left:10px}
+.cnav--next{right:10px}
+
+.dots{
+  display:flex;justify-content:center;align-items:center;gap:9px;
+  padding:12px;background:var(--panel);border-top:1px solid var(--line);
+}
+.cdot{
+  width:7px;height:7px;border-radius:50%;padding:0;flex:none;
+  border:none;background:var(--line-bright);cursor:pointer;
+  -webkit-appearance:none;appearance:none;
+  transition:background .2s,transform .2s;
+}
+.cdot[aria-current="true"]{background:var(--gold);transform:scale(1.3)}
+.cdot:focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px}
 
 /* ── 工具卡片網格 ───────────────────────── */
 .tools{margin-top:var(--section-gap)}
@@ -409,10 +455,39 @@ footer{
     </div>
 
     <figure class="hero-media">
-      <div class="chrome"><i></i><i></i><i></i><span data-i18n="heroShotCaption">ScrollScore 匯出的影片</span></div>
-      <img class="shot" src="preview/scrollscore-export.webp"
-           width="1280" height="720" fetchpriority="high" decoding="async"
-           data-i18n-attr="alt:altExport" alt="ScrollScore 匯出的 1920x1080 影片畫格：白底樂譜、播放游標、下方鋼琴鍵盤，上方是曲名、右下角是頻道浮水印">
+      <div class="chrome"><i></i><i></i><i></i><span id="heroCaption">ScrollScore ・ 匯出的影片</span></div>
+
+      <div class="carousel-wrap">
+        <div class="carousel" id="heroCarousel" tabindex="0" role="group"
+             aria-roledescription="carousel" data-i18n-attr="aria-label:heroCarouselLabel"
+             aria-label="四個工具的畫面，可左右滑動">
+        <div class="slide" data-cap="heroCap1">
+          <img class="shot" src="preview/scrollscore-export.webp" width="1280" height="720" fetchpriority="high" decoding="async"
+               data-i18n-attr="alt:altExport" alt="ScrollScore 匯出的 1920x1080 影片畫格：白底樂譜、播放游標、下方鋼琴鍵盤，上方是曲名、右下角是頻道浮水印">
+        </div>
+        <div class="slide" data-cap="heroCap2">
+          <img class="shot" data-shot="sightscore" src="preview/sightscore-zh.webp" width="1280" height="720" decoding="async"
+               data-i18n-attr="alt:altSightScore" alt="SightScore 操作畫面：依級數與調性生成的視奏練習譜">
+        </div>
+        <div class="slide" data-cap="heroCap3">
+          <img class="shot" data-shot="harmonymap" src="preview/harmonymap-zh.webp" width="1280" height="720" decoding="async"
+               data-i18n-attr="alt:altHarmonyMap" alt="HarmonyMap 操作畫面：Cmaj7 的組成音標示在鍵盤上，旁邊列出和弦資訊與可搭配的音階">
+        </div>
+        <div class="slide" data-cap="heroCap4">
+          <img class="shot" data-shot="loudnorm" src="preview/loudnorm-zh.webp" width="1280" height="720" decoding="async"
+               data-i18n-attr="alt:altLoudNorm" alt="LoudMaster 操作畫面：響度從 -17.8 校正到 -14.3 LUFS 的前後對照">
+        </div>
+        </div>
+        <button class="cnav cnav--prev" id="heroPrev" type="button" data-i18n-attr="aria-label:heroPrevLabel" aria-label="上一張"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button class="cnav cnav--next" id="heroNext" type="button" data-i18n-attr="aria-label:heroNextLabel" aria-label="下一張"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+
+      <div class="dots" id="heroDots">
+      <button class="cdot" type="button" data-go="0"></button>
+      <button class="cdot" type="button" data-go="1"></button>
+      <button class="cdot" type="button" data-go="2"></button>
+      <button class="cdot" type="button" data-go="3"></button>
+      </div>
     </figure>
   </section>
 
@@ -592,7 +667,12 @@ const I18N = {
     heroMeta: "完全免費 · 免安裝 · 免註冊 · 開啟即用",
     heroCtaMain: "開啟 ScrollScore", heroCtaAlt: "看四個工具",
     toolsTitle: "四個工具",
-    heroShotCaption: "ScrollScore 匯出的影片",
+    heroCarouselLabel: "四個工具的畫面，可左右滑動",
+    heroPrevLabel: "上一張", heroNextLabel: "下一張",
+    heroCap1: "ScrollScore ・ 匯出的影片",
+    heroCap2: "SightScore ・ 視奏練習譜",
+    heroCap3: "HarmonyMap ・ 和弦與音階",
+    heroCap4: "LoudMaster ・ 響度校正",
     altExport: "ScrollScore 匯出的 1920×1080 影片畫格：白底樂譜、播放游標、下方鋼琴鍵盤，上方是曲名、右下角是頻道浮水印",
     altScrollScore: "ScrollScore 操作畫面：樂譜隨拍捲動，鋼琴鍵盤同步標示按下的音",
     altSightScore: "SightScore 操作畫面：依級數與調性生成的視奏練習譜",
@@ -644,7 +724,12 @@ const I18N = {
     heroMeta: "100% free · No install · No sign-up · Instant access",
     heroCtaMain: "Open ScrollScore", heroCtaAlt: "See all four tools",
     toolsTitle: "Four tools",
-    heroShotCaption: "A video exported from ScrollScore",
+    heroCarouselLabel: "Screens from the four tools, swipe left and right",
+    heroPrevLabel: "Previous", heroNextLabel: "Next",
+    heroCap1: "ScrollScore · exported video",
+    heroCap2: "SightScore · practice sheet",
+    heroCap3: "HarmonyMap · chords and scales",
+    heroCap4: "LoudMaster · loudness correction",
     altExport: "A 1920x1080 frame from a ScrollScore export: the score on white, the playhead, the keyboard below, the piece title above and a channel watermark bottom-right",
     altScrollScore: "ScrollScore in use: the score scrolls in time with the beat while the keyboard highlights the notes being played",
     altSightScore: "SightScore in use: a sight-reading sheet generated for the chosen grade and key",
@@ -717,6 +802,9 @@ function applyLanguage(lang) {
     if (el.tagName === "SOURCE") el.srcset = url; else el.src = url;
   });
 
+  // 輪播的說明文字是「目前這一張」的,不是靜態的,data-i18n 掃不到,要另外同步
+  syncHeroCaption(lang);
+
   const lt = document.getElementById("langToggle");
   lt.setAttribute("aria-pressed", lang === "en" ? "true" : "false");
 
@@ -731,6 +819,62 @@ document.getElementById("langToggle").addEventListener("click", () => {
   currentLang = currentLang === "zh" ? "en" : "zh";
   applyLanguage(currentLang);
 });
+
+/* ── 首屏輪播 ─────────────────────────────────────────────────
+   捲動、吸附、方向鍵全部交給瀏覽器原生的 scroll-snap,這裡只做兩件事:
+   把圓點/箭頭的狀態跟說明文字對到目前那一張,以及讓圓點與箭頭可以點。
+   所以 JS 掛掉或還沒載入時,輪播照樣能用手指滑。
+
+   宣告式函式會提升,所以上面的 applyLanguage 可以先呼叫它。 */
+function heroSlideIndex(){
+  const car = document.getElementById("heroCarousel");
+  if (!car || !car.clientWidth) return 0;
+  const n = car.querySelectorAll(".slide").length;
+  return Math.max(0, Math.min(n - 1, Math.round(car.scrollLeft / car.clientWidth)));
+}
+function syncHeroCaption(lang){
+  const car = document.getElementById("heroCarousel");
+  if (!car) return;
+  const dict = I18N[lang] || I18N.zh;
+  const slides = car.querySelectorAll(".slide");
+  const i = heroSlideIndex();
+  const cap = document.getElementById("heroCaption");
+  const key = slides[i] && slides[i].dataset.cap;
+  if (cap && dict[key]) cap.textContent = dict[key];
+  document.querySelectorAll("#heroDots .cdot").forEach((d, n) => {
+    d.setAttribute("aria-current", String(n === i));
+    const k = slides[n] && slides[n].dataset.cap;
+    if (dict[k]) d.setAttribute("aria-label", dict[k]);
+  });
+  const prev = document.getElementById("heroPrev"), next = document.getElementById("heroNext");
+  if (prev) prev.disabled = i === 0;
+  if (next) next.disabled = i === slides.length - 1;
+}
+(function initHeroCarousel(){
+  const car = document.getElementById("heroCarousel");
+  if (!car) return;
+  const slides = [...car.querySelectorAll(".slide")];
+  const goTo = i => {
+    const t = slides[Math.max(0, Math.min(slides.length - 1, i))];
+    if (t) car.scrollTo({ left: t.offsetLeft - slides[0].offsetLeft, behavior: "smooth" });
+  };
+  // 用手指滑的時候不會經過 goTo(),所以目前是第幾張一律從 scrollLeft 反推,
+  // 不要自己記一個 index 累加——那個會跟實際畫面對不起來
+  let t;
+  car.addEventListener("scroll", () => {
+    clearTimeout(t);
+    t = setTimeout(() => syncHeroCaption(currentLang), 90);
+  }, { passive: true });
+  document.querySelectorAll("#heroDots .cdot").forEach(d => {
+    d.addEventListener("click", () => goTo(+d.dataset.go));
+  });
+  const prev = document.getElementById("heroPrev"), next = document.getElementById("heroNext");
+  if (prev) prev.addEventListener("click", () => goTo(heroSlideIndex() - 1));
+  if (next) next.addEventListener("click", () => goTo(heroSlideIndex() + 1));
+  // 視窗寬度變了,吸附點也跟著變,狀態要重算
+  addEventListener("resize", () => syncHeroCaption(currentLang), { passive: true });
+  syncHeroCaption(currentLang);
+})();
 </script>
 
 </body>
