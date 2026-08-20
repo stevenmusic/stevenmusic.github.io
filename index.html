@@ -149,8 +149,7 @@ body{
 .hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:clamp(22px, 3vw, 30px)}
 .hero-cta .btn{height:46px;padding:12px 24px;font-size:var(--fs-lg)}
 
-/* 首屏的產品畫面。目前是示意插圖,換成實際截圖時把整個 <svg class="shot"> 換成
-   <img class="shot" src="preview/scrollscore.webp" alt="ScrollScore 操作畫面"> 即可 */
+/* 首屏的產品畫面:ScrollScore 載入範例樂譜、播放中的實際畫面 */
 .hero-media{
   border:1px solid var(--line);border-radius:var(--radius-lg);
   background:linear-gradient(160deg, var(--panel-2), #14100A);
@@ -165,7 +164,10 @@ body{
   margin-left:8px;font-size:var(--fs-2xs);color:var(--muted);letter-spacing:.06em;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
-.hero-media .shot{display:block;width:100%;aspect-ratio:16 / 10;object-fit:cover}
+/* height:auto 不能省——img 上的 height="834" 屬性會變成 height:834px 的樣式提示,
+   而 aspect-ratio 只有在 height 是 auto 時才拿來推算高度,不然整張圖會撐成 750px 高。
+   width/height 屬性本身要留著,瀏覽器才能在圖載入前就保留正確的版位 */
+.hero-media .shot{display:block;width:100%;height:auto;aspect-ratio:59 / 41;object-fit:cover}
 
 /* ── 工具卡片網格 ───────────────────────── */
 .tools{margin-top:var(--section-gap)}
@@ -198,13 +200,14 @@ body{
   .card:hover .go svg{transform:translateX(4px)}
 }
 
-/* 預覽區:目前是示意插圖,換成實際截圖時把 <svg> 換成
-   <img src="preview/scrollscore.webp" alt="ScrollScore 操作畫面" loading="lazy"> 即可 */
+/* 預覽區:preview/ 底下每個工具各一組 zh/en 截圖,語言切換時由 applyLanguage 換 src */
 .thumb{
   position:relative;flex:none;
   background:linear-gradient(160deg, var(--panel-2), #14100A);
   border-bottom:1px solid var(--line);
-  aspect-ratio:16 / 10;overflow:hidden;
+  /* 59:41 = 截圖來源的 1180x820(平板橫式)。版位比例跟來源一致,object-fit:cover
+     才不會裁掉工具的標題列或底部 */
+  aspect-ratio:59 / 41;overflow:hidden;
 }
 .thumb svg,.thumb img{
   display:block;width:100%;height:100%;object-fit:cover;
@@ -269,7 +272,7 @@ body{
   .card--sm .who{display:none}
   .card--sm h2{font-size:var(--fs-lg)}
   .card--sm .go{padding-top:14px}
-  .card--feature .thumb{aspect-ratio:16 / 9}
+  .card--feature .thumb{aspect-ratio:59 / 41}
   .card--feature .card-body{padding:18px}
   .card--feature .who{display:none}
 }
@@ -278,11 +281,20 @@ body{
   .nav-links{display:none}
   .hero-cta .btn{height:44px;padding:11px 20px;font-size:var(--fs-md)}
 }
-/* 品牌字樣只在真的塞不下時才收掉。iPhone 這類 360-430px 的主流寬度還放得下,
-   門檻壓到 359px,不要在最常見的手機上把品牌名藏起來 */
-@media(max-width:359px){
+/* 360-430px(iPhone 這類主流手機寬度)靠縮小導覽列本身把品牌名留下來,
+   而不是直接藏掉。品牌 + EN + 開始使用 在 360px 只差幾 px,收一下字級、
+   icon 與左右 padding 就夠了 */
+@media(max-width:429px){
+  .nav-inner{gap:10px}
+  .nav-right{gap:8px}
+  .brand{font-size:var(--fs-md);gap:7px}
+  .brand svg{width:20px;height:20px}
+  .site-nav .btn{padding:7px 11px}
+  .site-nav .btn--primary{padding:8px 13px}
+}
+/* 再窄就真的塞不下了,品牌只留圖示 */
+@media(max-width:339px){
   .brand .brand-name{display:none}
-  .site-nav .btn--primary{padding:8px 14px}
   .hero-cta{gap:10px}
   .hero-cta .btn{flex:1 1 auto;justify-content:center}
 }
@@ -392,59 +404,11 @@ footer{
       </div>
     </div>
 
-    <!-- 換成實際截圖時,把下面整個 <svg class="shot"> 換成
-         <img class="shot" src="preview/scrollscore.webp" alt="ScrollScore 操作畫面" loading="eager" width="320" height="200"> -->
     <figure class="hero-media">
       <div class="chrome"><i></i><i></i><i></i><span>ScrollScore</span></div>
-      <svg class="shot" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="橫向捲動的五線譜與鋼琴鍵盤示意">
-        <g stroke="#4A4028" stroke-width="1">
-          <line x1="16" y1="48" x2="304" y2="48"/><line x1="16" y1="58" x2="304" y2="58"/>
-          <line x1="16" y1="68" x2="304" y2="68"/><line x1="16" y1="78" x2="304" y2="78"/>
-          <line x1="16" y1="88" x2="304" y2="88"/>
-        </g>
-        <g stroke="#EFD48A" stroke-width="1.6" stroke-linecap="round">
-          <line x1="52" y1="78" x2="52" y2="52"/><line x1="82" y1="68" x2="82" y2="42"/>
-          <line x1="112" y1="58" x2="112" y2="32"/><line x1="142" y1="73" x2="142" y2="47"/>
-        </g>
-        <g fill="#EFD48A">
-          <ellipse cx="46" cy="78" rx="6" ry="4.4"/><ellipse cx="76" cy="68" rx="6" ry="4.4"/>
-          <ellipse cx="106" cy="58" rx="6" ry="4.4"/><ellipse cx="136" cy="73" rx="6" ry="4.4"/>
-        </g>
-        <g stroke="#8A7D5F" stroke-width="1.6" stroke-linecap="round">
-          <line x1="178" y1="63" x2="178" y2="37"/><line x1="208" y1="53" x2="208" y2="27"/>
-          <line x1="238" y1="68" x2="238" y2="42"/><line x1="268" y1="78" x2="268" y2="52"/>
-        </g>
-        <g fill="#8A7D5F">
-          <ellipse cx="172" cy="63" rx="6" ry="4.4"/><ellipse cx="202" cy="53" rx="6" ry="4.4"/>
-          <ellipse cx="232" cy="68" rx="6" ry="4.4"/><ellipse cx="262" cy="78" rx="6" ry="4.4"/>
-        </g>
-        <rect x="150" y="26" width="10" height="76" fill="#C9A24B" opacity=".14"/>
-        <line x1="155" y1="24" x2="155" y2="104" stroke="#EFD48A" stroke-width="1.6"/>
-        <g stroke="#4A4028" stroke-width="1">
-          <rect x="16" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-          <rect x="36" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-          <rect x="56" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-          <rect x="76" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-          <rect x="96" y="132" width="20" height="54" rx="3" fill="#C9A24B" fill-opacity=".45"/>
-          <rect x="116" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-          <rect x="136" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-          <rect x="156" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-          <rect x="176" y="132" width="20" height="54" rx="3" fill="#C9A24B" fill-opacity=".45"/>
-          <rect x="196" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-          <rect x="216" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-          <rect x="236" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-          <rect x="256" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-          <rect x="276" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-        </g>
-        <g fill="#0C0A07" stroke="#4A4028" stroke-width="1">
-          <rect x="30" y="132" width="12" height="34" rx="2"/><rect x="50" y="132" width="12" height="34" rx="2"/>
-          <rect x="90" y="132" width="12" height="34" rx="2"/><rect x="110" y="132" width="12" height="34" rx="2"/>
-          <rect x="130" y="132" width="12" height="34" rx="2" fill="#C9A24B" fill-opacity=".55"/>
-          <rect x="170" y="132" width="12" height="34" rx="2"/><rect x="190" y="132" width="12" height="34" rx="2"/>
-          <rect x="230" y="132" width="12" height="34" rx="2"/><rect x="250" y="132" width="12" height="34" rx="2"/>
-          <rect x="270" y="132" width="12" height="34" rx="2"/>
-        </g>
-      </svg>
+      <img class="shot" data-shot="scrollscore" src="preview/scrollscore-zh.webp"
+           width="1200" height="834" fetchpriority="high" decoding="async"
+           data-i18n-attr="alt:altScrollScore" alt="ScrollScore 操作畫面：樂譜隨拍捲動，鋼琴鍵盤同步標示按下的音">
     </figure>
   </section>
 
@@ -456,55 +420,9 @@ footer{
 
     <a class="card card--feature" href="ScrollScore/">
       <div class="thumb">
-        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="橫向捲動的五線譜與鋼琴鍵盤示意">
-          <g stroke="#4A4028" stroke-width="1">
-            <line x1="16" y1="48" x2="304" y2="48"/><line x1="16" y1="58" x2="304" y2="58"/>
-            <line x1="16" y1="68" x2="304" y2="68"/><line x1="16" y1="78" x2="304" y2="78"/>
-            <line x1="16" y1="88" x2="304" y2="88"/>
-          </g>
-          <g stroke="#EFD48A" stroke-width="1.6" stroke-linecap="round">
-            <line x1="52" y1="78" x2="52" y2="52"/><line x1="82" y1="68" x2="82" y2="42"/>
-            <line x1="112" y1="58" x2="112" y2="32"/><line x1="142" y1="73" x2="142" y2="47"/>
-          </g>
-          <g fill="#EFD48A">
-            <ellipse cx="46" cy="78" rx="6" ry="4.4"/><ellipse cx="76" cy="68" rx="6" ry="4.4"/>
-            <ellipse cx="106" cy="58" rx="6" ry="4.4"/><ellipse cx="136" cy="73" rx="6" ry="4.4"/>
-          </g>
-          <g stroke="#8A7D5F" stroke-width="1.6" stroke-linecap="round">
-            <line x1="178" y1="63" x2="178" y2="37"/><line x1="208" y1="53" x2="208" y2="27"/>
-            <line x1="238" y1="68" x2="238" y2="42"/><line x1="268" y1="78" x2="268" y2="52"/>
-          </g>
-          <g fill="#8A7D5F">
-            <ellipse cx="172" cy="63" rx="6" ry="4.4"/><ellipse cx="202" cy="53" rx="6" ry="4.4"/>
-            <ellipse cx="232" cy="68" rx="6" ry="4.4"/><ellipse cx="262" cy="78" rx="6" ry="4.4"/>
-          </g>
-          <rect x="150" y="26" width="10" height="76" fill="#C9A24B" opacity=".14"/>
-          <line x1="155" y1="24" x2="155" y2="104" stroke="#EFD48A" stroke-width="1.6"/>
-          <g stroke="#4A4028" stroke-width="1">
-            <rect x="16" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-            <rect x="36" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-            <rect x="56" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-            <rect x="76" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-            <rect x="96" y="132" width="20" height="54" rx="3" fill="#C9A24B" fill-opacity=".45"/>
-            <rect x="116" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-            <rect x="136" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-            <rect x="156" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-            <rect x="176" y="132" width="20" height="54" rx="3" fill="#C9A24B" fill-opacity=".45"/>
-            <rect x="196" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-            <rect x="216" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-            <rect x="236" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-            <rect x="256" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-            <rect x="276" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
-          </g>
-          <g fill="#0C0A07" stroke="#4A4028" stroke-width="1">
-            <rect x="30" y="132" width="12" height="34" rx="2"/><rect x="50" y="132" width="12" height="34" rx="2"/>
-            <rect x="90" y="132" width="12" height="34" rx="2"/><rect x="110" y="132" width="12" height="34" rx="2"/>
-            <rect x="130" y="132" width="12" height="34" rx="2" fill="#C9A24B" fill-opacity=".55"/>
-            <rect x="170" y="132" width="12" height="34" rx="2"/><rect x="190" y="132" width="12" height="34" rx="2"/>
-            <rect x="230" y="132" width="12" height="34" rx="2"/><rect x="250" y="132" width="12" height="34" rx="2"/>
-            <rect x="270" y="132" width="12" height="34" rx="2"/>
-          </g>
-        </svg>
+        <img data-shot="scrollscore" src="preview/scrollscore-zh.webp" width="1200" height="834"
+             loading="lazy" decoding="async"
+             data-i18n-attr="alt:altScrollScore" alt="ScrollScore 操作畫面：樂譜隨拍捲動，鋼琴鍵盤同步標示按下的音">
       </div>
       <div class="card-body">
         <div class="card-head">
@@ -529,28 +447,9 @@ footer{
 
     <a class="card card--sm" href="SightScore/">
       <div class="thumb">
-        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="一疊自動生成的視奏練習譜示意">
-          <rect x="44" y="34" width="232" height="50" rx="9" fill="#201A0F" stroke="#2A2415" stroke-width="1"/>
-          <rect x="36" y="56" width="248" height="56" rx="10" fill="#1B1610" stroke="#332C1B" stroke-width="1"/>
-          <rect x="28" y="82" width="264" height="80" rx="11" fill="#141009" stroke="#4A4028" stroke-width="1"/>
-          <g stroke="#4A4028" stroke-width="1">
-            <line x1="46" y1="104" x2="274" y2="104"/><line x1="46" y1="113" x2="274" y2="113"/>
-            <line x1="46" y1="122" x2="274" y2="122"/><line x1="46" y1="131" x2="274" y2="131"/>
-            <line x1="46" y1="140" x2="274" y2="140"/>
-          </g>
-          <g stroke="#EFD48A" stroke-width="1.5" stroke-linecap="round">
-            <line x1="71" y1="140" x2="71" y2="118"/><line x1="101" y1="122" x2="101" y2="100"/>
-            <line x1="131" y1="131" x2="131" y2="109"/><line x1="161" y1="113" x2="161" y2="91"/>
-            <line x1="191" y1="122" x2="191" y2="100"/><line x1="221" y1="104" x2="221" y2="82"/>
-            <line x1="251" y1="113" x2="251" y2="91"/>
-          </g>
-          <g fill="#EFD48A">
-            <ellipse cx="66" cy="140" rx="5.4" ry="4"/><ellipse cx="96" cy="122" rx="5.4" ry="4"/>
-            <ellipse cx="126" cy="131" rx="5.4" ry="4"/><ellipse cx="156" cy="113" rx="5.4" ry="4"/>
-            <ellipse cx="186" cy="122" rx="5.4" ry="4"/><ellipse cx="216" cy="104" rx="5.4" ry="4"/>
-            <ellipse cx="246" cy="113" rx="5.4" ry="4"/>
-          </g>
-        </svg>
+        <img data-shot="sightscore" src="preview/sightscore-zh.webp" width="1200" height="834"
+             loading="lazy" decoding="async"
+             data-i18n-attr="alt:altSightScore" alt="SightScore 操作畫面：依級數與調性生成的視奏練習譜">
       </div>
       <div class="card-body">
         <div class="card-head">
@@ -570,23 +469,9 @@ footer{
 
     <a class="card card--sm" href="HarmonyMap/">
       <div class="thumb">
-        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="五度圈與和弦關係視覺化示意">
-          <circle cx="160" cy="100" r="66" fill="none" stroke="#4A4028" stroke-width="1"/>
-          <circle cx="160" cy="100" r="50" fill="none" stroke="#2A2415" stroke-width="1"/>
-          <path d="M160 34 L217.2 133 L102.8 133 Z" fill="#C9A24B" fill-opacity=".08" stroke="#C9A24B" stroke-width="1.4" stroke-linejoin="round"/>
-          <g fill="#201A0F" stroke="#4A4028" stroke-width="1">
-            <circle cx="193" cy="42.8" r="6"/><circle cx="217.2" cy="67" r="6"/><circle cx="226" cy="100" r="6"/>
-            <circle cx="193" cy="157.2" r="6"/><circle cx="160" cy="166" r="6"/><circle cx="127" cy="157.2" r="6"/>
-            <circle cx="94" cy="100" r="6"/><circle cx="102.8" cy="67" r="6"/><circle cx="127" cy="42.8" r="6"/>
-          </g>
-          <g fill="#EFD48A">
-            <circle cx="160" cy="34" r="7.5"/><circle cx="217.2" cy="133" r="7.5"/><circle cx="102.8" cy="133" r="7.5"/>
-          </g>
-          <circle cx="160" cy="100" r="15" fill="#161209" stroke="#C9A24B" stroke-width="1"/>
-          <g fill="#C9A24B">
-            <circle cx="160" cy="94" r="2.2"/><circle cx="160" cy="100" r="2.2"/><circle cx="160" cy="106" r="2.2"/>
-          </g>
-        </svg>
+        <img data-shot="harmonymap" src="preview/harmonymap-zh.webp" width="1200" height="834"
+             loading="lazy" decoding="async"
+             data-i18n-attr="alt:altHarmonyMap" alt="HarmonyMap 操作畫面：Cmaj7 的組成音標示在鍵盤上，旁邊列出和弦資訊與可搭配的音階">
       </div>
       <div class="card-body">
         <div class="card-head">
@@ -606,24 +491,9 @@ footer{
 
     <a class="card card--sm" href="LoudNorm/">
       <div class="thumb">
-        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="校正前後的音訊波形對照示意">
-          <g fill="#8A7D5F" fill-opacity=".55">
-            <rect x="36" y="60" width="8" height="80" rx="4"/><rect x="51" y="84" width="8" height="32" rx="4"/>
-            <rect x="66" y="46" width="8" height="108" rx="4"/><rect x="81" y="72" width="8" height="56" rx="4"/>
-            <rect x="96" y="38" width="8" height="124" rx="4"/><rect x="111" y="80" width="8" height="40" rx="4"/>
-            <rect x="126" y="54" width="8" height="92" rx="4"/><rect x="141" y="68" width="8" height="64" rx="4"/>
-          </g>
-          <line x1="163" y1="32" x2="163" y2="168" stroke="#4A4028" stroke-width="1" stroke-dasharray="4 4"/>
-          <g stroke="#C9A24B" stroke-width="1" stroke-dasharray="5 5" opacity=".7">
-            <line x1="172" y1="64" x2="292" y2="64"/><line x1="172" y1="136" x2="292" y2="136"/>
-          </g>
-          <g fill="#C9A24B">
-            <rect x="178" y="68" width="8" height="64" rx="4"/><rect x="193" y="65" width="8" height="70" rx="4"/>
-            <rect x="208" y="69" width="8" height="62" rx="4"/><rect x="223" y="66" width="8" height="68" rx="4"/>
-            <rect x="238" y="67" width="8" height="66" rx="4"/><rect x="253" y="65" width="8" height="70" rx="4"/>
-            <rect x="268" y="68" width="8" height="64" rx="4"/><rect x="283" y="66" width="8" height="68" rx="4"/>
-          </g>
-        </svg>
+        <img data-shot="loudnorm" src="preview/loudnorm-zh.webp" width="1200" height="834"
+             loading="lazy" decoding="async"
+             data-i18n-attr="alt:altLoudNorm" alt="LoudMaster 操作畫面：響度從 -17.8 校正到 -14.3 LUFS 的前後對照">
       </div>
       <div class="card-body">
         <div class="card-head">
@@ -706,6 +576,10 @@ const I18N = {
     heroMeta: "完全免費 · 免安裝 · 免註冊 · 開啟即用",
     heroCtaMain: "開啟 ScrollScore", heroCtaAlt: "看四個工具",
     toolsTitle: "四個工具",
+    altScrollScore: "ScrollScore 操作畫面：樂譜隨拍捲動，鋼琴鍵盤同步標示按下的音",
+    altSightScore: "SightScore 操作畫面：依級數與調性生成的視奏練習譜",
+    altHarmonyMap: "HarmonyMap 操作畫面：Cmaj7 的組成音標示在鍵盤上，旁邊列出和弦資訊與可搭配的音階",
+    altLoudNorm: "LoudMaster 操作畫面：響度從 -17.8 校正到 -14.3 LUFS 的前後對照",
     tag1: "樂譜播放器",
     desc1: "橫向捲動樂譜播放器，把譜面、鍵盤與節奏放在同一個畫面上，練習跟教學都不必再來回翻頁。",
     point1a: "支援 MusicXML 匯入，自動排版並隨拍捲動",
@@ -752,6 +626,10 @@ const I18N = {
     heroMeta: "100% free · No install · No sign-up · Instant access",
     heroCtaMain: "Open ScrollScore", heroCtaAlt: "See all four tools",
     toolsTitle: "Four tools",
+    altScrollScore: "ScrollScore in use: the score scrolls in time with the beat while the keyboard highlights the notes being played",
+    altSightScore: "SightScore in use: a sight-reading sheet generated for the chosen grade and key",
+    altHarmonyMap: "HarmonyMap in use: the notes of Cmaj7 highlighted on the keyboard, with chord details and matching scales alongside",
+    altLoudNorm: "LoudMaster in use: loudness corrected from -17.8 to -14.3 LUFS, before and after",
     tag1: "Score Player",
     desc1: "A horizontal scrolling score player that puts the sheet music, keyboard, and rhythm on one screen — no more flipping pages while practicing or teaching.",
     point1a: "Imports MusicXML, auto-formats it, and scrolls in time with the beat",
@@ -809,6 +687,12 @@ function applyLanguage(lang) {
       const [attr, key] = pair.split(":");
       if (dict[key] != null) el.setAttribute(attr, dict[key]);
     });
+  });
+
+  // 截圖是四個工具的實際畫面,裡面的介面文字就是該語言的版本,所以要跟著整頁一起換,
+  // 不然中文頁面會配到一張英文介面的圖
+  document.querySelectorAll("[data-shot]").forEach(el => {
+    el.src = "preview/" + el.dataset.shot + "-" + lang + ".webp";
   });
 
   const lt = document.getElementById("langToggle");
