@@ -168,6 +168,9 @@ body{
    而 aspect-ratio 只有在 height 是 auto 時才拿來推算高度,不然整張圖會撐成 750px 高。
    width/height 屬性本身要留著,瀏覽器才能在圖載入前就保留正確的版位 */
 .hero-media .shot{display:block;width:100%;height:auto;aspect-ratio:59 / 41;object-fit:cover}
+/* 匯出畫格是 16:9 的影片畫面,不是 app 截圖。用 contain 讓它在框裡保持完整比例,
+   上下自然留出黑邊——那正是影片播放器該有的樣子,裁掉標題或浮水印反而不對 */
+.hero-media .shot--video{object-fit:contain;background:#0b0906}
 
 /* ── 工具卡片網格 ───────────────────────── */
 .tools{margin-top:var(--section-gap)}
@@ -405,10 +408,10 @@ footer{
     </div>
 
     <figure class="hero-media">
-      <div class="chrome"><i></i><i></i><i></i><span>ScrollScore</span></div>
-      <img class="shot" data-shot="scrollscore" src="preview/scrollscore-zh.webp"
-           width="1200" height="834" fetchpriority="high" decoding="async"
-           data-i18n-attr="alt:altScrollScore" alt="ScrollScore 操作畫面：樂譜隨拍捲動，鋼琴鍵盤同步標示按下的音">
+      <div class="chrome"><i></i><i></i><i></i><span data-i18n="heroShotCaption">ScrollScore 匯出的影片</span></div>
+      <img class="shot shot--video" data-shot="scrollscore-export" src="preview/scrollscore-export-zh.webp"
+           width="1280" height="720" fetchpriority="high" decoding="async"
+           data-i18n-attr="alt:altExport" alt="ScrollScore 匯出的 1920x1080 影片畫格：白底樂譜、播放游標、下方鋼琴鍵盤，上方是曲名、右下角是頻道浮水印">
     </figure>
   </section>
 
@@ -576,6 +579,8 @@ const I18N = {
     heroMeta: "完全免費 · 免安裝 · 免註冊 · 開啟即用",
     heroCtaMain: "開啟 ScrollScore", heroCtaAlt: "看四個工具",
     toolsTitle: "四個工具",
+    heroShotCaption: "ScrollScore 匯出的影片",
+    altExport: "ScrollScore 匯出的 1920×1080 影片畫格：白底樂譜、播放游標、下方鋼琴鍵盤，上方是曲名、右下角是頻道浮水印",
     altScrollScore: "ScrollScore 操作畫面：樂譜隨拍捲動，鋼琴鍵盤同步標示按下的音",
     altSightScore: "SightScore 操作畫面：依級數與調性生成的視奏練習譜",
     altHarmonyMap: "HarmonyMap 操作畫面：Cmaj7 的組成音標示在鍵盤上，旁邊列出和弦資訊與可搭配的音階",
@@ -626,6 +631,8 @@ const I18N = {
     heroMeta: "100% free · No install · No sign-up · Instant access",
     heroCtaMain: "Open ScrollScore", heroCtaAlt: "See all four tools",
     toolsTitle: "Four tools",
+    heroShotCaption: "A video exported from ScrollScore",
+    altExport: "A 1920x1080 frame from a ScrollScore export: the score on white, the playhead, the keyboard below, the piece title above and a channel watermark bottom-right",
     altScrollScore: "ScrollScore in use: the score scrolls in time with the beat while the keyboard highlights the notes being played",
     altSightScore: "SightScore in use: a sight-reading sheet generated for the chosen grade and key",
     altHarmonyMap: "HarmonyMap in use: the notes of Cmaj7 highlighted on the keyboard, with chord details and matching scales alongside",
