@@ -46,7 +46,12 @@
 /* touch-action:manipulation 只關掉「雙擊放大」這個手勢,雙指縮放完全不受影響——
    跟直接鎖 viewport 的 user-scalable=no 不一樣,那個連縮放需求的使用者也會一起擋掉 */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-html{-webkit-text-size-adjust:100%}
+html{
+  -webkit-text-size-adjust:100%;
+  scroll-behavior:smooth;
+  /* 錨點連結的落點要扣掉黏在頂端的導覽列高度,不然標題會被蓋掉 */
+  scroll-padding-top:78px;
+}
 body{
   min-height:100%;
   background:
@@ -54,57 +59,116 @@ body{
     var(--bg);
   color:var(--ivory);
   font-family:"Noto Sans TC",sans-serif;
-  padding:clamp(32px, 6vw, 56px) 20px 0;
 }
-.wrap{max-width:1120px;margin:0 auto}
+/* 左右留白從 body 移到 .wrap:導覽列要滿版出血,裡面那層才對齊內容欄寬 */
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
 
-/* ── 頂列(語言切換) ───────────────────────── */
-/* 首頁原本沒有任何 header/工具列,四個工具的 #langToggle 都活在一條 header 裡——
-   這裡就地補一條只放這顆按鈕的列,btn 樣式跟 LANG_KEY 都跟四個工具共用同一份定義 */
-.top-bar{display:flex;justify-content:flex-end;margin-bottom:clamp(18px, 3vw, 28px)}
+/* ── 站台導覽列 ───────────────────────── */
+/* 原本這裡只是一條靠右放語言鈕的 top-bar。改成黏頂導覽列:左邊品牌、右邊錨點連結
+   加一顆主要 CTA——首頁在使用者滑到卡片之前,本來一個可點的目標都沒有。
+   btn 樣式跟 LANG_KEY 仍然跟四個工具共用同一份定義 */
+.site-nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(12,10,7,.82);
+  -webkit-backdrop-filter:saturate(140%) blur(12px);
+  backdrop-filter:saturate(140%) blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{display:flex;align-items:center;gap:14px;height:62px}
+.brand{
+  display:inline-flex;align-items:center;gap:9px;
+  text-decoration:none;color:var(--ivory);
+  font-family:"Noto Serif TC",serif;font-weight:700;
+  font-size:var(--fs-lg);letter-spacing:.01em;white-space:nowrap;
+}
+.brand svg{width:23px;height:23px;flex:none;color:var(--gold)}
+.brand:focus-visible{outline:2px solid var(--gold-bright);outline-offset:4px;border-radius:6px}
+.nav-right{display:flex;align-items:center;gap:clamp(6px, 1.6vw, 18px);margin-left:auto}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-links a{
+  text-decoration:none;color:var(--muted-bright);
+  font-size:var(--fs-md);font-weight:500;white-space:nowrap;
+  padding:8px 12px;border-radius:var(--radius-pill);
+  transition:color .2s, background .2s;
+}
+.nav-links a:hover{color:var(--ivory);background:var(--panel-2)}
+.nav-links a:focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px}
+.nav-actions{display:flex;align-items:center;gap:8px}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:6px;line-height:1;
   border:1px solid var(--gold);background:transparent;color:var(--gold);
   font-family:inherit;font-size:var(--fs-md);font-weight:500;
   padding:8px 16px;height:38px;border-radius:var(--radius-pill);cursor:pointer;
-  transition:background .2s,color .2s;white-space:nowrap;
+  transition:background .2s,color .2s,border-color .2s;white-space:nowrap;
+  text-decoration:none;
 }
 .btn svg{flex:none}
 .btn:hover,.btn:focus-visible{background:var(--gold);color:var(--bg);outline:none}
 .btn:active{background:var(--gold);color:var(--bg)}
+/* 主要行動按鈕:整頁只有這一種是實心的,語言鈕維持外框 */
+.btn--primary{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:700}
+.btn--primary:hover,.btn--primary:focus-visible{background:var(--gold-bright);border-color:var(--gold-bright);color:var(--bg)}
+.btn--primary:active{background:var(--gold-bright);border-color:var(--gold-bright)}
+/* 導覽列裡靠尺寸拉出主從,不靠顏色——語言鈕按下去也是金色實心,同尺寸會看起來像兩顆主按鈕 */
+.site-nav .btn{height:34px;padding:7px 13px;font-size:var(--fs-sm)}
+.site-nav .btn--primary{height:38px;padding:8px 18px;font-size:var(--fs-md)}
 /* min-width 要放在文字那個 span 上,不是按鈕本身——按鈕寬度是 icon+padding+文字撐出來的,
    本來就比隨便設的 min-width 寬,放在按鈕上不會真的卡到任何東西 */
 #langToggle .btn-label{min-width:1.3em;text-align:center;display:inline-block}
 #langToggle[aria-pressed="true"]{background:var(--gold);color:var(--bg)}
 
 /* ── Hero ───────────────────────── */
-.hero{text-align:center;max-width:680px;margin:0 auto clamp(30px, 5vw, 46px)}
+/* 原本是置中的純文字 hero,首屏除了標題什麼都沒有。改成左文右圖:
+   文字欄結尾放兩顆 CTA,圖那欄放產品實際畫面 */
+.hero{
+  display:grid;grid-template-columns:1fr;
+  gap:clamp(26px, 5vw, 40px);align-items:center;
+  padding-top:clamp(34px, 6vw, 66px);
+}
+@media(min-width:900px){
+  .hero{grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(30px, 4vw, 54px)}
+}
+.hero-copy{max-width:560px}
 .hero .kicker{
   font-size:var(--fs-xs);letter-spacing:.24em;text-transform:uppercase;
   color:var(--muted-bright);margin-bottom:14px;font-weight:500;
 }
 .hero h1{
   font-family:"Noto Serif TC",serif;font-weight:700;
-  font-size:clamp(32px, 8vw, 48px);
+  font-size:clamp(34px, 7vw, 54px);
   /* --gold,不是 --gold-bright:四個工具的 header h1 都是這個色階,首頁大標題原本用了
      更亮的 --gold-bright,跟工具頁的品牌字色不一致,並排看得出色差 */
   color:var(--gold);letter-spacing:.02em;
-  line-height:1.25;margin-bottom:16px;
+  line-height:1.2;margin-bottom:18px;
 }
 .hero h1 .h1b{color:var(--ivory)}
-.hero .lede{font-size:var(--fs-lg);color:var(--muted-bright);line-height:1.75}
-/* 賣點從內文抽出來變成獨立的一排——埋在句子裡沒人讀得到 */
-.badges{
-  list-style:none;display:flex;flex-wrap:wrap;justify-content:center;
-  gap:8px;margin-top:22px;
+.hero .lede{font-size:var(--fs-lg);color:var(--muted-bright);line-height:1.8}
+/* 原本是四顆 badge 排成一列(完全免費/免安裝/免註冊/開啟即用)。四顆講的是同一件事,
+   卻佔掉一整排,還得為了中英文換行位置不同另外寫一段 2x2 grid 才不會位移。收成一行 */
+.hero-meta{margin-top:14px;font-size:var(--fs-sm);color:var(--muted);line-height:1.8}
+.hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:clamp(22px, 3vw, 30px)}
+.hero-cta .btn{height:46px;padding:12px 24px;font-size:var(--fs-lg)}
+
+/* 首屏的產品畫面。目前是示意插圖,換成實際截圖時把整個 <svg class="shot"> 換成
+   <img class="shot" src="preview/scrollscore.webp" alt="ScrollScore 操作畫面"> 即可 */
+.hero-media{
+  border:1px solid var(--line);border-radius:var(--radius-lg);
+  background:linear-gradient(160deg, var(--panel-2), #14100A);
+  overflow:hidden;box-shadow:var(--shadow-md);
 }
-.badges li{
-  font-size:var(--fs-xs);color:var(--gold);font-weight:500;
-  border:1px solid var(--line);background:rgba(201,162,75,.05);
-  border-radius:var(--radius-pill);padding:5px 13px;
+.hero-media .chrome{
+  display:flex;align-items:center;gap:6px;
+  padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);
 }
+.hero-media .chrome i{width:9px;height:9px;border-radius:50%;background:var(--line-bright);flex:none}
+.hero-media .chrome span{
+  margin-left:8px;font-size:var(--fs-2xs);color:var(--muted);letter-spacing:.06em;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.hero-media .shot{display:block;width:100%;aspect-ratio:16 / 10;object-fit:cover}
 
 /* ── 工具卡片網格 ───────────────────────── */
+.tools{margin-top:var(--section-gap)}
 .grid{display:grid;grid-template-columns:1fr;gap:18px}
 @media(min-width:900px){
   .grid{grid-template-columns:repeat(3,1fr)}
@@ -198,10 +262,6 @@ body{
 }
 /* 手機再收一輪:縮圖已經在旁邊了,卡片標題再放一顆 34px 的 icon 只是多佔一行 */
 @media(max-width:559px){
-  /* badges 固定排成 2x2:原本用 flex-wrap 讓瀏覽器自動換行,中文 4 個字短、剛好擠進一行,
-     英文字長度不同,換行位置不可預期(3+1),兩種語言的版面高度會不一樣、下面整段跟著錯開。
-     固定 2 欄之後,不管中英文都是同樣的兩行兩欄,語言切換時這一區不會再位移 */
-  .badges{display:grid;grid-template-columns:1fr 1fr;justify-items:center;gap:8px;max-width:320px;margin-left:auto;margin-right:auto}
   .grid{gap:14px}
   .card--sm .thumb{width:42%}
   .card--sm .card-body{padding:15px}
@@ -213,6 +273,20 @@ body{
   .card--feature .card-body{padding:18px}
   .card--feature .who{display:none}
 }
+/* 導覽列在窄螢幕收掉錨點連結,只留品牌 + 語言 + 主 CTA */
+@media(max-width:759px){
+  .nav-links{display:none}
+  .hero-cta .btn{height:44px;padding:11px 20px;font-size:var(--fs-md)}
+}
+/* 品牌字樣只在真的塞不下時才收掉。iPhone 這類 360-430px 的主流寬度還放得下,
+   門檻壓到 359px,不要在最常見的手機上把品牌名藏起來 */
+@media(max-width:359px){
+  .brand .brand-name{display:none}
+  .site-nav .btn--primary{padding:8px 14px}
+  .hero-cta{gap:10px}
+  .hero-cta .btn{flex:1 1 auto;justify-content:center}
+}
+
 /* 主打卡:桌機左圖右文 */
 @media(min-width:760px){
   .card--feature{flex-direction:row}
@@ -255,7 +329,7 @@ details p{padding:0 18px 17px;font-size:var(--fs-sm);color:var(--muted-bright);l
 footer{
   margin-top:var(--section-gap);
   border-top:1px solid var(--line);
-  padding:30px 20px 44px;text-align:center;
+  padding:30px 0 44px;text-align:center;
 }
 .sitemap{
   list-style:none;display:flex;flex-wrap:wrap;justify-content:center;
@@ -277,30 +351,108 @@ footer{
 </head>
 <body>
 
+<header class="site-nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="16" r="3" fill="currentColor" stroke="none"/></svg>
+      <span class="brand-name">Steven Music</span>
+    </a>
+    <div class="nav-right">
+      <nav class="nav-links" data-i18n-attr="aria-label:navLabel" aria-label="網站導覽">
+        <a href="#tools" data-i18n="navTools">工具</a>
+        <a href="#faq" data-i18n="navFaq">常見問題</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn" id="langToggle" aria-pressed="false" data-i18n-attr="aria-label:langToggleLabel,title:langToggleTitle" aria-label="切換為英文" title="切換語言">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 010 18 15 15 0 010-18z"/>
+          </svg>
+          <span class="btn-label" id="langLabel" data-i18n="langToggleText">EN</span>
+        </button>
+        <a class="btn btn--primary" href="ScrollScore/" data-i18n="navCta">開始使用</a>
+      </div>
+    </div>
+  </div>
+</header>
+
 <div class="wrap">
 
-  <div class="top-bar">
-    <button class="btn" id="langToggle" aria-pressed="false" data-i18n-attr="aria-label:langToggleLabel,title:langToggleTitle" aria-label="切換為英文" title="切換語言">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 010 18 15 15 0 010-18z"/>
+  <section class="hero" id="top">
+    <div class="hero-copy">
+      <p class="kicker" data-i18n="kicker">免費線上音樂工具</p>
+      <h1><span data-i18n="heroH1a">音樂</span><span class="h1b" data-i18n="heroH1b">工具箱</span></h1>
+      <p class="lede" data-i18n="lede">為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。</p>
+      <p class="hero-meta" data-i18n="heroMeta">完全免費 · 免安裝 · 免註冊 · 開啟即用</p>
+      <div class="hero-cta">
+        <a class="btn btn--primary" href="ScrollScore/">
+          <span data-i18n="heroCtaMain">開啟 ScrollScore</span>
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn" href="#tools" data-i18n="heroCtaAlt">看四個工具</a>
+      </div>
+    </div>
+
+    <!-- 換成實際截圖時,把下面整個 <svg class="shot"> 換成
+         <img class="shot" src="preview/scrollscore.webp" alt="ScrollScore 操作畫面" loading="eager" width="320" height="200"> -->
+    <figure class="hero-media">
+      <div class="chrome"><i></i><i></i><i></i><span>ScrollScore</span></div>
+      <svg class="shot" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" role="img" aria-label="橫向捲動的五線譜與鋼琴鍵盤示意">
+        <g stroke="#4A4028" stroke-width="1">
+          <line x1="16" y1="48" x2="304" y2="48"/><line x1="16" y1="58" x2="304" y2="58"/>
+          <line x1="16" y1="68" x2="304" y2="68"/><line x1="16" y1="78" x2="304" y2="78"/>
+          <line x1="16" y1="88" x2="304" y2="88"/>
+        </g>
+        <g stroke="#EFD48A" stroke-width="1.6" stroke-linecap="round">
+          <line x1="52" y1="78" x2="52" y2="52"/><line x1="82" y1="68" x2="82" y2="42"/>
+          <line x1="112" y1="58" x2="112" y2="32"/><line x1="142" y1="73" x2="142" y2="47"/>
+        </g>
+        <g fill="#EFD48A">
+          <ellipse cx="46" cy="78" rx="6" ry="4.4"/><ellipse cx="76" cy="68" rx="6" ry="4.4"/>
+          <ellipse cx="106" cy="58" rx="6" ry="4.4"/><ellipse cx="136" cy="73" rx="6" ry="4.4"/>
+        </g>
+        <g stroke="#8A7D5F" stroke-width="1.6" stroke-linecap="round">
+          <line x1="178" y1="63" x2="178" y2="37"/><line x1="208" y1="53" x2="208" y2="27"/>
+          <line x1="238" y1="68" x2="238" y2="42"/><line x1="268" y1="78" x2="268" y2="52"/>
+        </g>
+        <g fill="#8A7D5F">
+          <ellipse cx="172" cy="63" rx="6" ry="4.4"/><ellipse cx="202" cy="53" rx="6" ry="4.4"/>
+          <ellipse cx="232" cy="68" rx="6" ry="4.4"/><ellipse cx="262" cy="78" rx="6" ry="4.4"/>
+        </g>
+        <rect x="150" y="26" width="10" height="76" fill="#C9A24B" opacity=".14"/>
+        <line x1="155" y1="24" x2="155" y2="104" stroke="#EFD48A" stroke-width="1.6"/>
+        <g stroke="#4A4028" stroke-width="1">
+          <rect x="16" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+          <rect x="36" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+          <rect x="56" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+          <rect x="76" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+          <rect x="96" y="132" width="20" height="54" rx="3" fill="#C9A24B" fill-opacity=".45"/>
+          <rect x="116" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+          <rect x="136" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+          <rect x="156" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+          <rect x="176" y="132" width="20" height="54" rx="3" fill="#C9A24B" fill-opacity=".45"/>
+          <rect x="196" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+          <rect x="216" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+          <rect x="236" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+          <rect x="256" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+          <rect x="276" y="132" width="20" height="54" rx="3" fill="#F4ECDA" fill-opacity=".10"/>
+        </g>
+        <g fill="#0C0A07" stroke="#4A4028" stroke-width="1">
+          <rect x="30" y="132" width="12" height="34" rx="2"/><rect x="50" y="132" width="12" height="34" rx="2"/>
+          <rect x="90" y="132" width="12" height="34" rx="2"/><rect x="110" y="132" width="12" height="34" rx="2"/>
+          <rect x="130" y="132" width="12" height="34" rx="2" fill="#C9A24B" fill-opacity=".55"/>
+          <rect x="170" y="132" width="12" height="34" rx="2"/><rect x="190" y="132" width="12" height="34" rx="2"/>
+          <rect x="230" y="132" width="12" height="34" rx="2"/><rect x="250" y="132" width="12" height="34" rx="2"/>
+          <rect x="270" y="132" width="12" height="34" rx="2"/>
+        </g>
       </svg>
-      <span class="btn-label" id="langLabel" data-i18n="langToggleText">EN</span>
-    </button>
-  </div>
+    </figure>
+  </section>
 
-  <header class="hero">
-    <p class="kicker">Steven Music</p>
-    <h1><span data-i18n="heroH1a">音樂</span><span class="h1b" data-i18n="heroH1b">工具箱</span></h1>
-    <p class="lede" data-i18n="lede">為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。</p>
-    <ul class="badges">
-      <li data-i18n="badge1">完全免費</li>
-      <li data-i18n="badge2">免安裝</li>
-      <li data-i18n="badge3">免註冊</li>
-      <li data-i18n="badge4">開啟即用</li>
-    </ul>
-  </header>
+  <main>
 
-  <main class="grid">
+  <section class="tools" id="tools">
+  <h2 class="section-title" data-i18n="toolsTitle">四個工具</h2>
+  <div class="grid">
 
     <a class="card card--feature" href="ScrollScore/">
       <div class="thumb">
@@ -489,9 +641,10 @@ footer{
       </div>
     </a>
 
-  </main>
+  </div>
+  </section>
 
-  <section class="faq">
+  <section class="faq" id="faq">
     <h2 class="section-title" data-i18n="faqTitle">常見問題</h2>
     <div class="faq-list">
       <details>
@@ -516,6 +669,8 @@ footer{
       </details>
     </div>
   </section>
+
+  </main>
 
 </div>
 
@@ -544,9 +699,13 @@ const I18N = {
     ogTitle: "Steven Music — 音樂工具箱",
     ogDescription: "為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。",
     langToggleText: "EN", langToggleLabel: "切換為英文", langToggleTitle: "切換語言",
+    navLabel: "網站導覽", navTools: "工具", navFaq: "常見問題", navCta: "開始使用",
+    kicker: "免費線上音樂工具",
     heroH1a: "音樂", heroH1b: "工具箱",
     lede: "為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。",
-    badge1: "完全免費", badge2: "免安裝", badge3: "免註冊", badge4: "開啟即用",
+    heroMeta: "完全免費 · 免安裝 · 免註冊 · 開啟即用",
+    heroCtaMain: "開啟 ScrollScore", heroCtaAlt: "看四個工具",
+    toolsTitle: "四個工具",
     tag1: "樂譜播放器",
     desc1: "橫向捲動樂譜播放器，把譜面、鍵盤與節奏放在同一個畫面上，練習跟教學都不必再來回翻頁。",
     point1a: "支援 MusicXML 匯入，自動排版並隨拍捲動",
@@ -586,9 +745,13 @@ const I18N = {
     ogTitle: "Steven Music — Music Toolbox",
     ogDescription: "A free suite of web tools for piano teaching, theory practice, and audio production. No install required.",
     langToggleText: "中", langToggleLabel: "Switch to Chinese", langToggleTitle: "Switch language",
+    navLabel: "Site navigation", navTools: "Tools", navFaq: "FAQ", navCta: "Get started",
+    kicker: "Free web music tools",
     heroH1a: "Music ", heroH1b: "Toolbox",
     lede: "A free suite of web tools for piano teaching, theory practice, and audio production — no install required, just open and use.",
-    badge1: "100% Free", badge2: "No Install", badge3: "No Sign-up", badge4: "Instant Access",
+    heroMeta: "100% free · No install · No sign-up · Instant access",
+    heroCtaMain: "Open ScrollScore", heroCtaAlt: "See all four tools",
+    toolsTitle: "Four tools",
     tag1: "Score Player",
     desc1: "A horizontal scrolling score player that puts the sheet music, keyboard, and rhythm on one screen — no more flipping pages while practicing or teaching.",
     point1a: "Imports MusicXML, auto-formats it, and scrolls in time with the beat",
