@@ -464,15 +464,10 @@ footer{
              aria-roledescription="carousel" data-i18n-attr="aria-label:heroCarouselLabel"
              aria-label="四個工具的畫面，可左右滑動">
         <div class="slide" data-cap="heroCap1" data-tool="ScrollScore" data-href="ScrollScore/">
-          <!-- 真的匯出檔的開頭 12 秒,不是截圖。poster 用同一支影片的畫格,所以在還沒載完、
-               或瀏覽器不支援 WebM(Safari 16.4 以前)時,看到的跟原本那張圖一模一樣。
-               autoplay 寫在標記裡,JS 沒跑起來也會動;要不要暫停由下面的 syncHeroCaption 決定 -->
-          <video class="shot" id="heroClip" poster="preview/scrollscore-export.webp"
-                 width="960" height="540" autoplay muted loop playsinline preload="metadata"
-                 data-i18n-attr="aria-label:altExport"
-                 aria-label="ScrollScore 匯出影片的開頭片段：白底樂譜隨拍捲動，播放游標與小節色塊標出目前位置，下方鋼琴鍵盤同步亮起按著的音">
-            <source src="preview/scrollscore-clip.webm" type="video/webm">
-          </video>
+          <img class="shot" src="preview/scrollscore-export.webp" width="1280" height="720"
+               fetchpriority="high" decoding="async"
+               data-i18n-attr="alt:altExport"
+               alt="ScrollScore 匯出的 1920×1080 影片畫格：白底樂譜隨拍捲動，播放游標與小節色塊標出目前位置，下方鋼琴鍵盤同步亮起按著的音，上方是曲名與作者、右下角是頻道浮水印">
         </div>
         <div class="slide" data-cap="heroCap2" data-tool="SightScore" data-href="SightScore/">
           <img class="shot" data-shot="sightscore" src="preview/sightscore-zh.webp" width="1280" height="720" decoding="async"
@@ -682,7 +677,7 @@ const I18N = {
     heroCap2: "SightScore ・ 視奏練習譜",
     heroCap3: "HarmonyMap ・ 和弦與音階",
     heroCap4: "LoudMaster ・ 響度校正",
-    altExport: "ScrollScore 匯出影片的開頭片段：白底樂譜隨拍捲動，播放游標與小節色塊標出目前位置，下方鋼琴鍵盤同步亮起按著的音，上方是曲名與作者、右下角是頻道浮水印",
+    altExport: "ScrollScore 匯出的 1920×1080 影片畫格：白底樂譜隨拍捲動，播放游標與小節色塊標出目前位置，下方鋼琴鍵盤同步亮起按著的音，上方是曲名與作者、右下角是頻道浮水印",
     altScrollScore: "ScrollScore 操作畫面：樂譜隨拍捲動，鋼琴鍵盤同步標示按下的音",
     altSightScore: "SightScore 操作畫面：依級數與調性生成的視奏練習譜",
     altHarmonyMap: "HarmonyMap 操作畫面：Cmaj7 的組成音標示在鍵盤上，旁邊列出和弦資訊與可搭配的音階",
@@ -739,7 +734,7 @@ const I18N = {
     heroCap2: "SightScore · practice sheet",
     heroCap3: "HarmonyMap · chords and scales",
     heroCap4: "LoudMaster · loudness correction",
-    altExport: "The opening of a video exported from ScrollScore: the score scrolling with the beat, a playhead and a shaded bar marking the current measure, the keyboard below lighting up the notes being held, the title and composer above and a channel watermark bottom-right",
+    altExport: "A 1920x1080 frame from a ScrollScore export: the score scrolling with the beat, a playhead and a shaded bar marking the current measure, the keyboard below lighting up the notes being held, the title and composer above and a channel watermark bottom-right",
     altScrollScore: "ScrollScore in use: the score scrolls in time with the beat while the keyboard highlights the notes being played",
     altSightScore: "SightScore in use: a sight-reading sheet generated for the chosen grade and key",
     altHarmonyMap: "HarmonyMap in use: the notes of Cmaj7 highlighted on the keyboard, with chord details and matching scales alongside",
@@ -861,16 +856,6 @@ function syncHeroCaption(lang){
   if (btn && btnText && cur && cur.dataset.tool) {
     btnText.textContent = (dict.heroCtaMain || "{tool}").replace("{tool}", cur.dataset.tool);
     btn.setAttribute("href", cur.dataset.href);
-  }
-
-  /* 第一張是影片:滑走就暫停。看不到的東西沒必要繼續解碼,而且 prefers-reduced-motion
-     的人不該被自動播放的動畫追著跑(CSS 攔不住 <video>,只能在這裡處理) */
-  const clip = document.getElementById("heroClip");
-  if (clip) {
-    const visible = !!(cur && cur.contains(clip));
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (visible && !reduce) { const q = clip.play(); if (q && q.catch) q.catch(() => {}); }
-    else clip.pause();
   }
 
   document.querySelectorAll("#heroDots .cdot").forEach((d, n) => {
