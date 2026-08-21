@@ -203,17 +203,24 @@ body{
 .cnav--next{right:10px}
 
 .dots{
-  display:flex;justify-content:center;align-items:center;gap:9px;
-  padding:12px;background:var(--panel);border-top:1px solid var(--line);
+  display:flex;justify-content:center;align-items:center;gap:2px;
+  padding:8px;background:var(--panel);border-top:1px solid var(--line);
 }
+/* 圓點的可視大小是 7px,但按鈕本體撐到 32px——手機上真正能點中的範圍
+   不能只有視覺上那一小點,不然滑到定點還得瞄準半天 */
 .cdot{
-  width:7px;height:7px;border-radius:50%;padding:0;flex:none;
-  border:none;background:var(--line-bright);cursor:pointer;
+  width:32px;height:32px;padding:0;flex:none;
+  border:none;background:transparent;cursor:pointer;
   -webkit-appearance:none;appearance:none;
+  display:flex;align-items:center;justify-content:center;
+}
+.cdot::after{
+  content:"";width:7px;height:7px;border-radius:50%;
+  background:var(--line-bright);
   transition:background .2s,transform .2s;
 }
-.cdot[aria-current="true"]{background:var(--gold);transform:scale(1.3)}
-.cdot:focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px}
+.cdot[aria-current="true"]::after{background:var(--gold);transform:scale(1.3)}
+.cdot:focus-visible{outline:2px solid var(--gold-bright);outline-offset:-6px;border-radius:50%}
 
 /* ── 工具卡片網格 ───────────────────────── */
 .tools{margin-top:var(--section-gap)}
