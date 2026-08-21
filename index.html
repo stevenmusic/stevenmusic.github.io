@@ -660,6 +660,12 @@ footer{
 </footer>
 
 <script>
+// 瀏覽器預設會在重新整理或上一頁/下一頁導覽時,把捲動位置還原成離開前的地方——
+// 這頁一長,常常變成一開就跳到「四個工具」。改成手動控制,沒有帶錨點( #faq 之類)
+// 進站一律回到最頂端。
+try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
+if (!location.hash) { window.scrollTo(0, 0); }
+
 // 跟 ScrollScore / SightScore / HarmonyMap / LoudMaster 共用同一把 localStorage key,
 // 使用者在任一工具切過語言,回到首頁或開其他工具時偏好會延續。
 const LANG_KEY = "sm_lang";
