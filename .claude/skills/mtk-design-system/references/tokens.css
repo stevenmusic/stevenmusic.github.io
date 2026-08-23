@@ -1,0 +1,130 @@
+/* Steven Music — Design Tokens v1
+   貼在每個工具 <style> 的最上方，之後只用變數，不要寫死色碼。 */
+
+:root {
+  /* 核心三色 */
+  --bg:        #0C0A07;
+  --ink:       #F4ECDA;
+  --gold:      #C9A24B;
+
+  /* 衍生 */
+  --bg-raise:  #15120D;   /* 卡片／輸入框底 */
+  --bg-sink:   #070502;   /* header / footer */
+  --ink-mute:  rgba(244, 236, 218, .66);
+  --ink-faint: rgba(244, 236, 218, .38);
+  --gold-soft: rgba(201, 162, 75, .22);   /* 邊框 */
+  --gold-glow: rgba(201, 162, 75, .40);   /* focus / hover */
+  --gold-deep: #A8842F;                   /* 按下狀態 */
+
+  /* 狀態 */
+  --ok:   #7FA86B;
+  --warn: #D6A441;
+  --err:  #C4614C;
+
+  /* 型 */
+  --ff-display: "Noto Serif TC", Georgia, serif;
+  --ff-body:    "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+  --fs-hero:  clamp(1.9rem, 6vw, 3.2rem);
+  --fs-h2:    clamp(1.3rem, 3.4vw, 1.9rem);
+  --fs-body:  clamp(0.95rem, 2.4vw, 1.05rem);
+  --fs-small: 0.82rem;
+
+  /* 間距 */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;
+  --sp-4: 16px; --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
+
+  --radius: 10px;
+  --wrap:   1100px;
+  --pad-x:  clamp(16px, 4vw, 32px);
+
+  --tap: 44px; /* 最小觸控目標 */
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+h1, h2, h3 { font-family: var(--ff-display); font-weight: 700; line-height: 1.25; }
+
+a { color: var(--gold); text-underline-offset: 3px; }
+
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--pad-x); }
+
+.card {
+  background: var(--bg-raise);
+  border: 1px solid var(--gold-soft);
+  border-radius: var(--radius);
+  padding: var(--sp-5);
+}
+
+/* 按鈕 */
+.btn {
+  min-height: var(--tap);
+  padding: 0 var(--sp-5);
+  border-radius: var(--radius);
+  border: 1px solid var(--gold);
+  background: var(--gold);
+  color: var(--bg);
+  font-family: var(--ff-body);
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background .18s ease, transform .18s ease;
+}
+.btn:hover  { background: var(--gold-deep); border-color: var(--gold-deep); }
+.btn:active { transform: translateY(1px); }
+
+.btn--ghost { background: transparent; color: var(--gold); }
+.btn--ghost:hover { background: var(--gold-soft); }
+
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+/* 表單 */
+input, select, textarea {
+  min-height: var(--tap);
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg-raise);
+  color: var(--ink);
+  border: 1px solid var(--gold-soft);
+  border-radius: var(--radius);
+  font: inherit;
+}
+label { display: block; font-size: var(--fs-small); color: var(--ink-mute); margin-bottom: var(--sp-1); }
+
+/* 數值 */
+.num { font-variant-numeric: tabular-nums; }
+
+/* Focus */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-color: var(--gold);
+}
+
+/* Header 返回鍵 */
+.back {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--tap); height: var(--tap);
+  color: var(--gold); text-decoration: none; font-size: 1.4rem;
+  border-radius: var(--radius);
+}
+.back:hover { background: var(--gold-soft); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
