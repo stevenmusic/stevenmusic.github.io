@@ -6,6 +6,7 @@ description: Steven Music 黑金設計系統的完整規範——色票、字體
 # Steven Music 黑金設計系統
 
 完整 token 檔在 `references/tokens.css`——需要寫 CSS 時直接讀取並貼入 `<style>` 最上方，不要重打。
+已定案的實際尺寸（鍵盤高度、觸控目標、樂譜顯示區留白等，四個工具裡調過的真實數字）在 `references/layouts.md`——做鍵盤或樂譜類元件前先查，不要重新試錯一輪。
 
 ## 核心三色（絕對不改）
 

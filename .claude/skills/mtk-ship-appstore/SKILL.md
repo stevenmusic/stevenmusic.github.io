@@ -18,11 +18,13 @@ description: 把既有的單檔 HTML 工具包裝成 iOS App 並送審 App Store
 - **真正的原生 UI 外框**：原生分頁列、原生設定頁，不是只有一片 WebView。
 - **裝置專屬功能**：麥克風輸入（調音／音準偵測）、Apple Pencil、iPad 分割視窗、外接 MIDI。
 
-ScrollScore 與 SightScore 最容易過關（離線題庫 + 匯出 + 練習提醒）；LoudMaster 因為 FFmpeg.wasm 在 iOS WebView 上效能與記憶體都吃緊，**不建議**作為第一個上架標的。
+ScrollScore 與 SightScore 最容易過關（離線生成/匯出 + 練習提醒）；LoudMaster 因為 FFmpeg.wasm 在 iOS WebView 上效能與記憶體都吃緊，**不建議**作為第一個上架標的。
 
 ## 建議的第一個上架目標
 
-以 **SightScore** 為首發：完全離線可生成、無大型相依、體積小、對「這不只是網站」的說明最好寫。
+以 **SightScore** 為首發：出題演算法本身完全離線可生成、無大型相依、體積小，對「這不只是網站」的說明最好寫。
+
+**但送審前要先補齊，現況還不合格**：SightScore 目前沒有 Service Worker，鋼琴取樣（`tonejs.github.io/audio/salamander/`）與 Google Fonts 都是執行期才向外 CDN fetch。生譜這件事離線沒問題，但斷網時播放會沒聲音、字型會換成系統預設——這正是 4.2 最容易被挑出來的「其實還是要連網」破綻。動工前先把取樣與字體內嵌進 app bundle，或至少加 Service Worker 快取起來。
 
 ## 流程
 
