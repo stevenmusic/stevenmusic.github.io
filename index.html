@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0C0A07">
 <title>Steven Music — 音樂工具箱</title>
-<meta name="description" content="為鋼琴教學、樂理練習與影音製作打造的免費網頁工具：捲動樂譜播放器、視奏題庫生成、和聲樂理視覺化、音訊響度正規化、黑膠收藏管理、師長聯絡簿。免安裝，開啟即用。">
+<meta name="description" content="為鋼琴教學、樂理練習與影音製作打造的免費網頁工具：捲動樂譜播放器、視奏題庫生成、和聲樂理視覺化、音訊響度正規化、師長聯絡簿。免安裝，開啟即用。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Steven Music — 音樂工具箱">
 <meta property="og:description" content="為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。">
@@ -225,10 +225,14 @@ body{
 /* ── 工具卡片網格 ───────────────────────── */
 .tools{margin-top:var(--section-gap)}
 .grid{display:grid;grid-template-columns:1fr;gap:18px}
-/* 六個工具排成 3 欄 × 2 列,每一張同樣大小。原本 ScrollScore 是一張橫跨整列的
-   主打卡,那是四個工具時代的排法——六張的時候 3×2 剛好填滿,不用再挑一個當代表 */
+/* 五張一樣大的卡,每列三張。原本 ScrollScore 是一張橫跨整列的主打卡,
+   那是四個工具時代的排法,現在不用再挑一個當代表。
+   五張排三欄,最後一列只有兩張——用 grid 的話那兩張會靠左、右邊空一格,
+   看起來像少了一張。改成 flex + justify-content:center,末列自己置中。
+   寬度用 calc 算成跟三欄格線一樣(兩道 18px 的間隙),所以每張還是等寬 */
 @media(min-width:900px){
-  .grid{grid-template-columns:repeat(3,1fr)}
+  .grid{display:flex;flex-wrap:wrap;justify-content:center}
+  .grid .card{flex:0 1 calc((100% - 36px) / 3)}
 }
 .card{
   position:relative;
@@ -437,7 +441,7 @@ footer{
           <span id="heroCtaMainText">開啟 ScrollScore</span>
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        <a class="btn" href="#tools" data-i18n="heroCtaAlt">看六個工具</a>
+        <a class="btn" href="#tools" data-i18n="heroCtaAlt">看五個工具</a>
       </div>
     </div>
 
@@ -447,7 +451,7 @@ footer{
       <div class="carousel-wrap">
         <div class="carousel" id="heroCarousel" tabindex="0" role="group"
              aria-roledescription="carousel" data-i18n-attr="aria-label:heroCarouselLabel"
-             aria-label="六個工具的畫面，可左右滑動">
+             aria-label="五個工具的畫面，可左右滑動">
         <div class="slide" data-cap="heroCap1" data-tool="ScrollScore" data-href="ScrollScore/">
           <img class="shot" src="preview/scrollscore-export.webp" width="1280" height="720"
                fetchpriority="high" decoding="async"
@@ -466,11 +470,7 @@ footer{
           <img class="shot" data-shot="loudnorm" src="preview/loudnorm-zh.webp" width="1280" height="720" decoding="async"
                data-i18n-attr="alt:altLoudNorm" alt="LoudMaster 操作畫面：響度從 -17.8 校正到 -14.3 LUFS 的前後對照">
         </div>
-        <div class="slide" data-cap="heroCap5" data-tool="VinylVault" data-href="VinylVault/">
-          <img class="shot" data-shot="vinylvault" src="preview/vinylvault-zh.webp" width="1280" height="720" decoding="async"
-               data-i18n-attr="alt:altVinylVault" alt="VinylVault 操作畫面：OK Computer 的四個黑膠版本並排，各自標出限量、獨佔通路、地區與唱片顏色">
-        </div>
-        <div class="slide" data-cap="heroCap6" data-tool="LessonNotes" data-href="LessonNotes/">
+        <div class="slide" data-cap="heroCap5" data-tool="LessonNotes" data-href="LessonNotes/">
           <img class="shot" data-shot="lessonnotes" src="preview/lessonnotes-zh.webp" width="1280" height="720" decoding="async"
                data-i18n-attr="alt:altLessonNotes" alt="LessonNotes 操作畫面：紙張色的琴課聯絡簿，頁面上是署名的入口與接下來要加的幾頁">
         </div>
@@ -485,7 +485,6 @@ footer{
       <button class="cdot" type="button" data-go="2"></button>
       <button class="cdot" type="button" data-go="3"></button>
       <button class="cdot" type="button" data-go="4"></button>
-      <button class="cdot" type="button" data-go="5"></button>
       </div>
     </figure>
   </section>
@@ -493,7 +492,7 @@ footer{
   <main>
 
   <section class="tools" id="tools">
-  <h2 class="section-title" data-i18n="toolsTitle">六個工具</h2>
+  <h2 class="section-title" data-i18n="toolsTitle">五個工具</h2>
   <div class="grid">
 
     <a class="card" href="ScrollScore/">
@@ -599,31 +598,6 @@ footer{
       </div>
     </a>
 
-    <a class="card" href="VinylVault/">
-      <div class="thumb">
-        <picture>
-          <!-- 手機把小卡排成左圖右文,橫式截圖擠在窄欄裡看不出是什麼,換成直式 -->
-          <source media="(max-width: 899px)" data-shot="vinylvault-portrait" srcset="preview/vinylvault-portrait-zh.webp" width="720" height="960">
-          <img data-shot="vinylvault" src="preview/vinylvault-zh.webp" width="1280" height="720"
-             loading="lazy" decoding="async"
-             data-i18n-attr="alt:altVinylVault" alt="VinylVault 操作畫面：OK Computer 的四個黑膠版本並排，各自標出限量、獨佔通路、地區與唱片顏色">
-        </picture>
-      </div>
-      <div class="card-body">
-        <div class="card-head">
-          <span class="icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/></svg>
-          </span>
-          <h2>VinylVault</h2>
-          <span class="tag" data-i18n="tag5">黑膠收藏</span>
-        </div>
-        <p class="desc" data-i18n="desc5">輸入歌手名字，自動抓出他歷年來所有黑膠發行與曲目，再標記自己想要哪張、收了哪張。</p>
-        <p class="who" data-i18n="who5">適合：黑膠收藏者、想追齊各地壓片版本的人</p>
-        <span class="go"><span data-i18n="cta5">整理黑膠收藏</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </span>
-      </div>
-    </a>
 
     <a class="card" href="LessonNotes/">
       <div class="thumb">
@@ -641,11 +615,11 @@ footer{
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v15H4z"/><path d="M8 5v15"/><path d="M12 10h5M12 14h5"/></svg>
           </span>
           <h2>LessonNotes</h2>
-          <span class="tag" data-i18n="tag6">課堂聯絡簿</span>
+          <span class="tag" data-i18n="tag5">課堂聯絡簿</span>
         </div>
-        <p class="desc" data-i18n="desc6">老師與家長共用的一本琴課聯絡簿。這堂課練到哪裡、下週要帶什麼譜、家裡練得順不順，都寫在同一頁上。</p>
-        <p class="who" data-i18n="who6">適合：音樂教師、想跟上孩子練習進度的家長</p>
-        <span class="go"><span data-i18n="cta6">翻開琴課小簿</span>
+        <p class="desc" data-i18n="desc5">老師與家長共用的一本琴課聯絡簿。這堂課練到哪裡、下週要帶什麼譜、家裡練得順不順，都寫在同一頁上。</p>
+        <p class="who" data-i18n="who5">適合：音樂教師、想跟上孩子練習進度的家長</p>
+        <span class="go"><span data-i18n="cta5">翻開琴課小簿</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </div>
@@ -659,7 +633,7 @@ footer{
     <div class="faq-list">
       <details>
         <summary data-i18n="q1">需要付費或註冊嗎？</summary>
-        <p data-i18n="a1">都不用付費，也不用安裝任何軟體。六個工具裡有五個連帳號都不必註冊，打開瀏覽器就能用；只有 LessonNotes 要用 Google 帳號署名一次，因為那是老師與家長共用的一本簿子，得先知道你是哪一位。</p>
+        <p data-i18n="a1">都不用付費，也不用安裝任何軟體。五個工具裡有四個連帳號都不必註冊，打開瀏覽器就能用；只有 LessonNotes 要用 Google 帳號署名一次，因為那是老師與家長共用的一本簿子，得先知道你是哪一位。</p>
       </details>
       <details>
         <summary data-i18n="q2">我的檔案會被上傳到伺服器嗎？</summary>
@@ -691,7 +665,6 @@ footer{
       <li><a href="SightScore/">SightScore</a></li>
       <li><a href="HarmonyMap/">HarmonyMap</a></li>
       <li><a href="LoudNorm/">LoudMaster</a></li>
-      <li><a href="VinylVault/">VinylVault</a></li>
       <li><a href="LessonNotes/">LessonNotes</a></li>
       <li><a href="https://musicsteven.com" target="_blank" rel="noopener" data-i18n="footerMainSite">主網站</a></li>
     </ul>
@@ -713,7 +686,7 @@ const LANG_KEY = "sm_lang";
 const I18N = {
   zh: {
     pageTitle: "Steven Music — 音樂工具箱",
-    metaDescription: "為鋼琴教學、樂理練習與影音製作打造的免費網頁工具：捲動樂譜播放器、視奏題庫生成、和聲樂理視覺化、音訊響度正規化、黑膠收藏管理、師長聯絡簿。免安裝，開啟即用。",
+    metaDescription: "為鋼琴教學、樂理練習與影音製作打造的免費網頁工具：捲動樂譜播放器、視奏題庫生成、和聲樂理視覺化、音訊響度正規化、師長聯絡簿。免安裝，開啟即用。",
     ogTitle: "Steven Music — 音樂工具箱",
     ogDescription: "為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。",
     langToggleText: "EN", langToggleLabel: "切換為英文", langToggleTitle: "切換語言",
@@ -722,22 +695,20 @@ const I18N = {
     heroH1a: "音樂", heroH1b: "工具箱",
     lede: "為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。",
     heroMeta: "完全免費 · 免安裝 · 開啟即用",
-    heroCtaMain: "開啟 {tool}", heroCtaAlt: "看六個工具",
-    toolsTitle: "六個工具",
-    heroCarouselLabel: "六個工具的畫面，可左右滑動",
+    heroCtaMain: "開啟 {tool}", heroCtaAlt: "看五個工具",
+    toolsTitle: "五個工具",
+    heroCarouselLabel: "五個工具的畫面，可左右滑動",
     heroPrevLabel: "上一張", heroNextLabel: "下一張",
     heroCap1: "ScrollScore ・ 匯出的影片",
     heroCap2: "SightScore ・ 視奏練習譜",
     heroCap3: "HarmonyMap ・ 和弦與音階",
     heroCap4: "LoudMaster ・ 響度校正",
-    heroCap5: "VinylVault ・ 黑膠版本收藏",
-    heroCap6: "LessonNotes ・ 琴課聯絡簿",
+    heroCap5: "LessonNotes ・ 琴課聯絡簿",
     altExport: "ScrollScore 匯出的 1920×1080 影片畫格：白底樂譜隨拍捲動，播放游標與小節色塊標出目前位置，下方鋼琴鍵盤同步亮起按著的音，上方是曲名與作者、右下角是頻道浮水印",
     altScrollScore: "ScrollScore 操作畫面：樂譜隨拍捲動，鋼琴鍵盤同步標示按下的音",
     altSightScore: "SightScore 操作畫面：依級數與調性生成的視奏練習譜",
     altHarmonyMap: "HarmonyMap 操作畫面：Cmaj7 的組成音標示在鍵盤上，旁邊列出和弦資訊與可搭配的音階",
     altLoudNorm: "LoudMaster 操作畫面：響度從 -17.8 校正到 -14.3 LUFS 的前後對照",
-    altVinylVault: "VinylVault 操作畫面：OK Computer 的四個黑膠版本並排，各自標出限量、獨佔通路、地區與唱片顏色",
     altLessonNotes: "LessonNotes 操作畫面：紙張色的琴課聯絡簿，頁面上是署名的入口與接下來要加的幾頁",
     tag1: "樂譜播放器",
     desc1: "橫向捲動樂譜播放器。匯入 MusicXML 就自動排版、隨拍捲動，鋼琴與鼓組同步標示，還能匯出練習或教學影片。",
@@ -755,17 +726,13 @@ const I18N = {
     desc4: "將音訊／影片響度自動校正至 -14 LUFS 標準，適用於串流平台發布前處理，全程於瀏覽器端完成。",
     who4: "適合：影音創作者、上架串流平台前的最後一關",
     cta4: "校正響度",
-    tag5: "黑膠收藏",
-    desc5: "輸入歌手名字，自動抓出他歷年來所有黑膠發行與曲目，再標記自己想要哪張、收了哪張。",
-    who5: "適合：黑膠收藏者、想追齊各地壓片版本的人",
-    cta5: "整理黑膠收藏",
-    tag6: "課堂聯絡簿",
-    desc6: "老師與家長共用的一本琴課聯絡簿。這堂課練到哪裡、下週要帶什麼譜、家裡練得順不順，都寫在同一頁上。",
-    who6: "適合：音樂教師、想跟上孩子練習進度的家長",
-    cta6: "翻開琴課小簿",
+    tag5: "課堂聯絡簿",
+    desc5: "老師與家長共用的一本琴課聯絡簿。這堂課練到哪裡、下週要帶什麼譜、家裡練得順不順，都寫在同一頁上。",
+    who5: "適合：音樂教師、想跟上孩子練習進度的家長",
+    cta5: "翻開琴課小簿",
     faqTitle: "常見問題",
     q1: "需要付費或註冊嗎？",
-    a1: "都不用付費，也不用安裝任何軟體。六個工具裡有五個連帳號都不必註冊，打開瀏覽器就能用；只有 LessonNotes 要用 Google 帳號署名一次，因為那是老師與家長共用的一本簿子，得先知道你是哪一位。",
+    a1: "都不用付費，也不用安裝任何軟體。五個工具裡有四個連帳號都不必註冊，打開瀏覽器就能用；只有 LessonNotes 要用 Google 帳號署名一次，因為那是老師與家長共用的一本簿子，得先知道你是哪一位。",
     q2: "我的檔案會被上傳到伺服器嗎？",
     a2: "LoudMaster 的響度校正全程在瀏覽器端完成，音訊與影片檔案不會離開你的電腦。",
     q3: "支援哪些樂譜格式？",
@@ -779,7 +746,7 @@ const I18N = {
   },
   en: {
     pageTitle: "Steven Music — Music Toolbox",
-    metaDescription: "Free web tools for piano teaching, theory practice, and audio production: a scrolling score player, sight-reading generator, harmony visualizer, loudness normalizer, vinyl collection manager, and a shared lesson notebook. No install — just open and use.",
+    metaDescription: "Free web tools for piano teaching, theory practice, and audio production: a scrolling score player, sight-reading generator, harmony visualizer, loudness normalizer, and a shared lesson notebook. No install — just open and use.",
     ogTitle: "Steven Music — Music Toolbox",
     ogDescription: "A free suite of web tools for piano teaching, theory practice, and audio production. No install required.",
     langToggleText: "中", langToggleLabel: "Switch to Chinese", langToggleTitle: "Switch language",
@@ -788,22 +755,20 @@ const I18N = {
     heroH1a: "Music ", heroH1b: "Toolbox",
     lede: "A free suite of web tools for piano teaching, theory practice, and audio production — no install required, just open and use.",
     heroMeta: "100% free · No install · Instant access",
-    heroCtaMain: "Open {tool}", heroCtaAlt: "See all six tools",
-    toolsTitle: "Six tools",
-    heroCarouselLabel: "Screens from the six tools, swipe left and right",
+    heroCtaMain: "Open {tool}", heroCtaAlt: "See all five tools",
+    toolsTitle: "Five tools",
+    heroCarouselLabel: "Screens from the five tools, swipe left and right",
     heroPrevLabel: "Previous", heroNextLabel: "Next",
     heroCap1: "ScrollScore · exported video",
     heroCap2: "SightScore · practice sheet",
     heroCap3: "HarmonyMap · chords and scales",
     heroCap4: "LoudMaster · loudness correction",
-    heroCap5: "VinylVault · vinyl pressings",
-    heroCap6: "LessonNotes · the lesson notebook",
+    heroCap5: "LessonNotes · the lesson notebook",
     altExport: "A 1920x1080 frame from a ScrollScore export: the score scrolling with the beat, a playhead and a shaded bar marking the current measure, the keyboard below lighting up the notes being held, the title and composer above and a channel watermark bottom-right",
     altScrollScore: "ScrollScore in use: the score scrolls in time with the beat while the keyboard highlights the notes being played",
     altSightScore: "SightScore in use: a sight-reading sheet generated for the chosen grade and key",
     altHarmonyMap: "HarmonyMap in use: the notes of Cmaj7 highlighted on the keyboard, with chord details and matching scales alongside",
     altLoudNorm: "LoudMaster in use: loudness corrected from -17.8 to -14.3 LUFS, before and after",
-    altVinylVault: "VinylVault in use: four vinyl pressings of OK Computer side by side, each tagged with its limited run, exclusive retailer, region and record colour",
     altLessonNotes: "LessonNotes in use: a paper-coloured lesson notebook showing where to sign in and the pages still to come",
     tag1: "Score Player",
     desc1: "A horizontal scrolling score player. Import MusicXML and it lays the score out and scrolls in time with the beat, the keyboard and drums light up as they play, and you can export a practice or teaching video.",
@@ -821,17 +786,13 @@ const I18N = {
     desc4: "Automatically normalizes audio/video loudness to -14 LUFS for streaming platforms — entirely in your browser.",
     who4: "For: content creators, the last step before publishing",
     cta4: "Normalize loudness",
-    tag5: "Vinyl Collection",
-    desc5: "Type an artist's name and it pulls in every vinyl pressing they have released, tracklists included — then mark what you want and what you own.",
-    who5: "For: vinyl collectors chasing pressings across regions",
-    cta5: "Organize your vinyl",
-    tag6: "Lesson Notebook",
-    desc6: "One lesson notebook a teacher and a family both read. What the lesson covered, which scores to bring next week, how practice went at home — all on the same page.",
-    who6: "For: music teachers, parents keeping up with practice at home",
-    cta6: "Open the notebook",
+    tag5: "Lesson Notebook",
+    desc5: "One lesson notebook a teacher and a family both read. What the lesson covered, which scores to bring next week, how practice went at home — all on the same page.",
+    who5: "For: music teachers, parents keeping up with practice at home",
+    cta5: "Open the notebook",
     faqTitle: "FAQ",
     q1: "Do I need to pay or sign up?",
-    a1: "Nothing to pay for and nothing to install. Five of the six need no account at all — just open them in your browser. Only LessonNotes asks you to sign in once with Google, because it is a notebook shared between a teacher and a family, so it has to know which one you are.",
+    a1: "Nothing to pay for and nothing to install. Four of the five need no account at all — just open them in your browser. Only LessonNotes asks you to sign in once with Google, because it is a notebook shared between a teacher and a family, so it has to know which one you are.",
     q2: "Are my files uploaded to a server?",
     a2: "LoudMaster's loudness correction runs entirely in your browser — your audio and video files never leave your computer.",
     q3: "What score formats are supported?",
