@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0C0A07">
 <title>Steven Music — 音樂工具箱</title>
-<meta name="description" content="為鋼琴教學、樂理練習與影音製作打造的免費網頁工具：捲動樂譜播放器、視奏題庫生成、和聲樂理視覺化、音訊響度正規化、師長聯絡簿。免安裝，開啟即用。">
+<meta name="description" content="為鋼琴教學、樂理練習與影音製作打造的免費網頁工具：捲動樂譜播放器、視奏題庫生成、和聲樂理視覺化、音訊響度正規化、師長聯絡簿、變速移調練習播放器。免安裝，開啟即用。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Steven Music — 音樂工具箱">
 <meta property="og:description" content="為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。">
@@ -66,7 +66,7 @@ body{
 /* ── 站台導覽列 ───────────────────────── */
 /* 原本這裡只是一條靠右放語言鈕的 top-bar。改成黏頂導覽列:左邊品牌、右邊錨點連結
    加一顆主要 CTA——首頁在使用者滑到卡片之前,本來一個可點的目標都沒有。
-   btn 樣式跟 LANG_KEY 仍然跟四個工具共用同一份定義 */
+   btn 樣式跟 LANG_KEY 仍然跟六個工具共用同一份定義 */
 .site-nav{
   position:sticky;top:0;z-index:50;
   background:rgba(12,10,7,.82);
@@ -136,7 +136,7 @@ body{
 .hero h1{
   font-family:"Noto Serif TC",serif;font-weight:700;
   font-size:clamp(34px, 7vw, 54px);
-  /* --gold,不是 --gold-bright:四個工具的 header h1 都是這個色階,首頁大標題原本用了
+  /* --gold,不是 --gold-bright:六個工具的 header h1 都是這個色階,首頁大標題原本用了
      更亮的 --gold-bright,跟工具頁的品牌字色不一致,並排看得出色差 */
   color:var(--gold);letter-spacing:.02em;
   line-height:1.2;margin-bottom:18px;
@@ -149,7 +149,7 @@ body{
 .hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:clamp(22px, 3vw, 30px)}
 .hero-cta .btn{height:46px;padding:12px 24px;font-size:var(--fs-lg)}
 
-/* 首屏的產品畫面:四個工具各一張,可以左右滑 */
+/* 首屏的產品畫面:六個工具各一張,可以左右滑 */
 .hero-media{
   border:1px solid var(--line-bright);border-radius:var(--radius-lg);
   background:linear-gradient(160deg, var(--panel-2), #14100A);
@@ -225,10 +225,10 @@ body{
 /* ── 工具卡片網格 ───────────────────────── */
 .tools{margin-top:var(--section-gap)}
 .grid{display:grid;grid-template-columns:1fr;gap:18px}
-/* 五張一樣大的卡,每列三張。原本 ScrollScore 是一張橫跨整列的主打卡,
-   那是四個工具時代的排法,現在不用再挑一個當代表。
-   五張排三欄,最後一列只有兩張——用 grid 的話那兩張會靠左、右邊空一格,
-   看起來像少了一張。改成 flex + justify-content:center,末列自己置中。
+/* 六張一樣大的卡,每列三張、剛好兩列填滿。原本 ScrollScore 是一張橫跨整列的
+   主打卡,那是四個工具時代的排法,現在不用再挑一個當代表。
+   排版沿用 flex + justify-content:center:工具數不是三的倍數時(先前的五張),
+   末列會自己置中,而不是像 grid 那樣靠左、右邊空一格看起來少一張。
    寬度用 calc 算成跟三欄格線一樣(兩道 18px 的間隙),所以每張還是等寬 */
 @media(min-width:900px){
   .grid{display:flex;flex-wrap:wrap;justify-content:center}
@@ -441,7 +441,7 @@ footer{
           <span id="heroCtaMainText">開啟 ScrollScore</span>
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        <a class="btn" href="#tools" data-i18n="heroCtaAlt">看五個工具</a>
+        <a class="btn" href="#tools" data-i18n="heroCtaAlt">看六個工具</a>
       </div>
     </div>
 
@@ -451,7 +451,7 @@ footer{
       <div class="carousel-wrap">
         <div class="carousel" id="heroCarousel" tabindex="0" role="group"
              aria-roledescription="carousel" data-i18n-attr="aria-label:heroCarouselLabel"
-             aria-label="五個工具的畫面，可左右滑動">
+             aria-label="六個工具的畫面，可左右滑動">
         <div class="slide" data-cap="heroCap1" data-tool="ScrollScore" data-href="ScrollScore/">
           <img class="shot" src="preview/scrollscore-export.webp" width="1280" height="720"
                fetchpriority="high" decoding="async"
@@ -474,6 +474,10 @@ footer{
           <img class="shot" data-shot="lessonnotes" src="preview/lessonnotes-zh.webp" width="1280" height="720" decoding="async"
                data-i18n-attr="alt:altLessonNotes" alt="LessonNotes 操作畫面：紙張色的琴課聯絡簿，頁面上是署名的入口與接下來要加的幾頁">
         </div>
+        <div class="slide" data-cap="heroCap6" data-tool="PitchMaster" data-href="PitchMaster/">
+          <img class="shot" data-shot="pitchmaster" src="preview/pitchmaster-zh.webp" width="1280" height="720" decoding="async"
+               data-i18n-attr="alt:altPitchMaster" alt="PitchMaster 操作畫面：一首伴奏放慢到 75%、降兩個半音，下面是速度與移調兩支滑桿">
+        </div>
         </div>
         <button class="cnav cnav--prev" id="heroPrev" type="button" data-i18n-attr="aria-label:heroPrevLabel" aria-label="上一張"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
         <button class="cnav cnav--next" id="heroNext" type="button" data-i18n-attr="aria-label:heroNextLabel" aria-label="下一張"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
@@ -485,6 +489,7 @@ footer{
       <button class="cdot" type="button" data-go="2"></button>
       <button class="cdot" type="button" data-go="3"></button>
       <button class="cdot" type="button" data-go="4"></button>
+      <button class="cdot" type="button" data-go="5"></button>
       </div>
     </figure>
   </section>
@@ -492,7 +497,7 @@ footer{
   <main>
 
   <section class="tools" id="tools">
-  <h2 class="section-title" data-i18n="toolsTitle">五個工具</h2>
+  <h2 class="section-title" data-i18n="toolsTitle">六個工具</h2>
   <div class="grid">
 
     <a class="card" href="ScrollScore/">
@@ -625,6 +630,32 @@ footer{
       </div>
     </a>
 
+    <a class="card" href="PitchMaster/">
+      <div class="thumb">
+        <picture>
+          <!-- 手機把卡片排成左圖右文,橫式截圖擠在窄欄裡看不出是什麼,換成直式 -->
+          <source media="(max-width: 899px)" data-shot="pitchmaster-portrait" srcset="preview/pitchmaster-portrait-zh.webp" width="720" height="960">
+          <img data-shot="pitchmaster" src="preview/pitchmaster-zh.webp" width="1280" height="720"
+             loading="lazy" decoding="async"
+             data-i18n-attr="alt:altPitchMaster" alt="PitchMaster 操作畫面：一首伴奏放慢到 75%、降兩個半音，下面是速度與移調兩支滑桿">
+        </picture>
+      </div>
+      <div class="card-body">
+        <div class="card-head">
+          <span class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16M4 16h16"/><circle cx="9" cy="8" r="2.4" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="2.4" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <h2>PitchMaster</h2>
+          <span class="tag" data-i18n="tag6">變速移調</span>
+        </div>
+        <p class="desc" data-i18n="desc6">把音檔放慢到跟得上的速度，音高完全不變；也可以整首移調 ±12 半音，換成唱得上去的調。扒歌、跟練、換調試唱都用同一頁。</p>
+        <p class="who" data-i18n="who6">適合：扒歌的人、跟著伴奏練習的學生、要換調的歌手</p>
+        <span class="go"><span data-i18n="cta6">放慢一首來練</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
   </div>
   </section>
 
@@ -633,11 +664,11 @@ footer{
     <div class="faq-list">
       <details>
         <summary data-i18n="q1">需要付費或註冊嗎？</summary>
-        <p data-i18n="a1">都不用付費，也不用安裝任何軟體。五個工具裡有四個連帳號都不必註冊，打開瀏覽器就能用；只有 LessonNotes 要用 Google 帳號署名一次，因為那是老師與家長共用的一本簿子，得先知道你是哪一位。</p>
+        <p data-i18n="a1">都不用付費，也不用安裝任何軟體。六個工具裡有五個連帳號都不必註冊，打開瀏覽器就能用；只有 LessonNotes 要用 Google 帳號署名一次，因為那是老師與家長共用的一本簿子，得先知道你是哪一位。</p>
       </details>
       <details>
         <summary data-i18n="q2">我的檔案會被上傳到伺服器嗎？</summary>
-        <p data-i18n="a2">LoudMaster 的響度校正全程在瀏覽器端完成，音訊與影片檔案不會離開你的電腦。</p>
+        <p data-i18n="a2">LoudMaster 的響度校正與 PitchMaster 的變速移調都是全程在瀏覽器端完成，音訊與影片檔案不會離開你的電腦。</p>
       </details>
       <details>
         <summary data-i18n="q3">支援哪些樂譜格式？</summary>
@@ -666,27 +697,29 @@ footer{
       <li><a href="HarmonyMap/">HarmonyMap</a></li>
       <li><a href="LoudNorm/">LoudMaster</a></li>
       <li><a href="LessonNotes/">LessonNotes</a></li>
+      <li><a href="PitchMaster/">PitchMaster</a></li>
       <li><a href="https://musicsteven.com" target="_blank" rel="noopener" data-i18n="footerMainSite">主網站</a></li>
     </ul>
-    <p class="copy" data-i18n="footerCopy">musicsteven.com 開發 &middot; 最後更新 2026 年 8 月</p>
+    <p class="copy" data-i18n="footerCopy">musicsteven.com 開發 &middot; 最後更新 2026 年 9 月</p>
   </div>
 </footer>
 
 <script>
 // 瀏覽器預設會在重新整理或上一頁/下一頁導覽時,把捲動位置還原成離開前的地方——
-// 這頁一長,常常變成一開就跳到「四個工具」。改成手動控制,沒有帶錨點( #faq 之類)
+// 這頁一長,常常變成一開就跳到「六個工具」。改成手動控制,沒有帶錨點( #faq 之類)
 // 進站一律回到最頂端。
 try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
 if (!location.hash) { window.scrollTo(0, 0); }
 
-// 跟 ScrollScore / SightScore / HarmonyMap / LoudMaster 共用同一把 localStorage key,
+// 跟 ScrollScore / SightScore / HarmonyMap / LoudMaster / LessonNotes / PitchMaster
+// 共用同一把 localStorage key,
 // 使用者在任一工具切過語言,回到首頁或開其他工具時偏好會延續。
 const LANG_KEY = "sm_lang";
 
 const I18N = {
   zh: {
     pageTitle: "Steven Music — 音樂工具箱",
-    metaDescription: "為鋼琴教學、樂理練習與影音製作打造的免費網頁工具：捲動樂譜播放器、視奏題庫生成、和聲樂理視覺化、音訊響度正規化、師長聯絡簿。免安裝，開啟即用。",
+    metaDescription: "為鋼琴教學、樂理練習與影音製作打造的免費網頁工具：捲動樂譜播放器、視奏題庫生成、和聲樂理視覺化、音訊響度正規化、師長聯絡簿、變速移調練習播放器。免安裝，開啟即用。",
     ogTitle: "Steven Music — 音樂工具箱",
     ogDescription: "為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。",
     langToggleText: "EN", langToggleLabel: "切換為英文", langToggleTitle: "切換語言",
@@ -695,21 +728,23 @@ const I18N = {
     heroH1a: "音樂", heroH1b: "工具箱",
     lede: "為鋼琴教學、樂理練習與影音製作打造的一系列免費網頁工具，無需安裝，開啟即用。",
     heroMeta: "完全免費 · 免安裝 · 開啟即用",
-    heroCtaMain: "開啟 {tool}", heroCtaAlt: "看五個工具",
-    toolsTitle: "五個工具",
-    heroCarouselLabel: "五個工具的畫面，可左右滑動",
+    heroCtaMain: "開啟 {tool}", heroCtaAlt: "看六個工具",
+    toolsTitle: "六個工具",
+    heroCarouselLabel: "六個工具的畫面，可左右滑動",
     heroPrevLabel: "上一張", heroNextLabel: "下一張",
     heroCap1: "ScrollScore ・ 匯出的影片",
     heroCap2: "SightScore ・ 視奏練習譜",
     heroCap3: "HarmonyMap ・ 和弦與音階",
     heroCap4: "LoudMaster ・ 響度校正",
     heroCap5: "LessonNotes ・ 琴課聯絡簿",
+    heroCap6: "PitchMaster ・ 變速與移調",
     altExport: "ScrollScore 匯出的 1920×1080 影片畫格：白底樂譜隨拍捲動，播放游標與小節色塊標出目前位置，下方鋼琴鍵盤同步亮起按著的音，上方是曲名與作者、右下角是頻道浮水印",
     altScrollScore: "ScrollScore 操作畫面：樂譜隨拍捲動，鋼琴鍵盤同步標示按下的音",
     altSightScore: "SightScore 操作畫面：依級數與調性生成的視奏練習譜",
     altHarmonyMap: "HarmonyMap 操作畫面：Cmaj7 的組成音標示在鍵盤上，旁邊列出和弦資訊與可搭配的音階",
     altLoudNorm: "LoudMaster 操作畫面：響度從 -17.8 校正到 -14.3 LUFS 的前後對照",
     altLessonNotes: "LessonNotes 操作畫面：紙張色的琴課聯絡簿，頁面上是署名的入口與接下來要加的幾頁",
+    altPitchMaster: "PitchMaster 操作畫面：一首伴奏放慢到 75%、降兩個半音，下面是速度與移調兩支滑桿",
     tag1: "樂譜播放器",
     desc1: "橫向捲動樂譜播放器。匯入 MusicXML 就自動排版、隨拍捲動，鋼琴與鼓組同步標示，還能匯出練習或教學影片。",
     who1: "適合：鋼琴教師、自學者、教學影片創作者",
@@ -730,11 +765,15 @@ const I18N = {
     desc5: "老師與家長共用的一本琴課聯絡簿。這堂課練到哪裡、下週要帶什麼譜、家裡練得順不順，都寫在同一頁上。",
     who5: "適合：音樂教師、想跟上孩子練習進度的家長",
     cta5: "翻開琴課小簿",
+    tag6: "變速移調",
+    desc6: "把音檔放慢到跟得上的速度，音高完全不變；也可以整首移調 ±12 半音，換成唱得上去的調。扒歌、跟練、換調試唱都用同一頁。",
+    who6: "適合：扒歌的人、跟著伴奏練習的學生、要換調的歌手",
+    cta6: "放慢一首來練",
     faqTitle: "常見問題",
     q1: "需要付費或註冊嗎？",
-    a1: "都不用付費，也不用安裝任何軟體。五個工具裡有四個連帳號都不必註冊，打開瀏覽器就能用；只有 LessonNotes 要用 Google 帳號署名一次，因為那是老師與家長共用的一本簿子，得先知道你是哪一位。",
+    a1: "都不用付費，也不用安裝任何軟體。六個工具裡有五個連帳號都不必註冊，打開瀏覽器就能用；只有 LessonNotes 要用 Google 帳號署名一次，因為那是老師與家長共用的一本簿子，得先知道你是哪一位。",
     q2: "我的檔案會被上傳到伺服器嗎？",
-    a2: "LoudMaster 的響度校正全程在瀏覽器端完成，音訊與影片檔案不會離開你的電腦。",
+    a2: "LoudMaster 的響度校正與 PitchMaster 的變速移調都是全程在瀏覽器端完成，音訊與影片檔案不會離開你的電腦。",
     q3: "支援哪些樂譜格式？",
     a3: "ScrollScore 支援 MusicXML 匯入；SightScore 則不需要匯入檔案，練習譜是依 ABRSM／Trinity 各級規則直接生成的。",
     q4: "手機或平板可以用嗎？",
@@ -746,7 +785,7 @@ const I18N = {
   },
   en: {
     pageTitle: "Steven Music — Music Toolbox",
-    metaDescription: "Free web tools for piano teaching, theory practice, and audio production: a scrolling score player, sight-reading generator, harmony visualizer, loudness normalizer, and a shared lesson notebook. No install — just open and use.",
+    metaDescription: "Free web tools for piano teaching, theory practice, and audio production: a scrolling score player, sight-reading generator, harmony visualizer, loudness normalizer, a shared lesson notebook, and a practice player with tempo and pitch control. No install — just open and use.",
     ogTitle: "Steven Music — Music Toolbox",
     ogDescription: "A free suite of web tools for piano teaching, theory practice, and audio production. No install required.",
     langToggleText: "中", langToggleLabel: "Switch to Chinese", langToggleTitle: "Switch language",
@@ -755,21 +794,23 @@ const I18N = {
     heroH1a: "Music ", heroH1b: "Toolbox",
     lede: "A free suite of web tools for piano teaching, theory practice, and audio production — no install required, just open and use.",
     heroMeta: "100% free · No install · Instant access",
-    heroCtaMain: "Open {tool}", heroCtaAlt: "See all five tools",
-    toolsTitle: "Five tools",
-    heroCarouselLabel: "Screens from the five tools, swipe left and right",
+    heroCtaMain: "Open {tool}", heroCtaAlt: "See all six tools",
+    toolsTitle: "Six tools",
+    heroCarouselLabel: "Screens from the six tools, swipe left and right",
     heroPrevLabel: "Previous", heroNextLabel: "Next",
     heroCap1: "ScrollScore · exported video",
     heroCap2: "SightScore · practice sheet",
     heroCap3: "HarmonyMap · chords and scales",
     heroCap4: "LoudMaster · loudness correction",
     heroCap5: "LessonNotes · the lesson notebook",
+    heroCap6: "PitchMaster · tempo and pitch",
     altExport: "A 1920x1080 frame from a ScrollScore export: the score scrolling with the beat, a playhead and a shaded bar marking the current measure, the keyboard below lighting up the notes being held, the title and composer above and a channel watermark bottom-right",
     altScrollScore: "ScrollScore in use: the score scrolls in time with the beat while the keyboard highlights the notes being played",
     altSightScore: "SightScore in use: a sight-reading sheet generated for the chosen grade and key",
     altHarmonyMap: "HarmonyMap in use: the notes of Cmaj7 highlighted on the keyboard, with chord details and matching scales alongside",
     altLoudNorm: "LoudMaster in use: loudness corrected from -17.8 to -14.3 LUFS, before and after",
     altLessonNotes: "LessonNotes in use: a paper-coloured lesson notebook showing where to sign in and the pages still to come",
+    altPitchMaster: "PitchMaster in use: a backing track slowed to 75% and dropped two semitones, with the speed and pitch sliders below",
     tag1: "Score Player",
     desc1: "A horizontal scrolling score player. Import MusicXML and it lays the score out and scrolls in time with the beat, the keyboard and drums light up as they play, and you can export a practice or teaching video.",
     who1: "For: piano teachers, self-learners, teaching-video creators",
@@ -790,11 +831,15 @@ const I18N = {
     desc5: "One lesson notebook a teacher and a family both read. What the lesson covered, which scores to bring next week, how practice went at home — all on the same page.",
     who5: "For: music teachers, parents keeping up with practice at home",
     cta5: "Open the notebook",
+    tag6: "Tempo & Pitch",
+    desc6: "Slow a track down to a speed you can actually follow, with the pitch left exactly where it was — or transpose the whole thing by up to 12 semitones into a key you can sing. One page for working out parts, practising along, and trying another key.",
+    who6: "For: anyone learning a part by ear, students practising to a backing track, singers changing key",
+    cta6: "Slow a track down",
     faqTitle: "FAQ",
     q1: "Do I need to pay or sign up?",
-    a1: "Nothing to pay for and nothing to install. Four of the five need no account at all — just open them in your browser. Only LessonNotes asks you to sign in once with Google, because it is a notebook shared between a teacher and a family, so it has to know which one you are.",
+    a1: "Nothing to pay for and nothing to install. Five of the six need no account at all — just open them in your browser. Only LessonNotes asks you to sign in once with Google, because it is a notebook shared between a teacher and a family, so it has to know which one you are.",
     q2: "Are my files uploaded to a server?",
-    a2: "LoudMaster's loudness correction runs entirely in your browser — your audio and video files never leave your computer.",
+    a2: "LoudMaster's loudness correction and PitchMaster's tempo and pitch shifting both run entirely in your browser — your audio and video files never leave your computer.",
     q3: "What score formats are supported?",
     a3: "ScrollScore imports MusicXML. SightScore doesn't need a file at all — it generates practice sheets directly from ABRSM/Trinity grade rules.",
     q4: "Does it work on phone or tablet?",
@@ -830,7 +875,7 @@ function applyLanguage(lang) {
     });
   });
 
-  // 截圖是四個工具的實際畫面,裡面的介面文字就是該語言的版本,所以要跟著整頁一起換,
+  // 截圖是六個工具的實際畫面,裡面的介面文字就是該語言的版本,所以要跟著整頁一起換,
   // 不然中文頁面會配到一張英文介面的圖
   document.querySelectorAll("[data-shot]").forEach(el => {
     const url = "preview/" + el.dataset.shot + "-" + lang + ".webp";
