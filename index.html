@@ -374,6 +374,8 @@ summary::after{
 details[open] summary::after{transform:rotate(-135deg)}
 summary:focus-visible{outline:2px solid var(--gold-bright);outline-offset:-3px}
 details p{padding:0 18px 17px;font-size:var(--fs-sm);color:var(--muted-bright);line-height:1.85}
+details p a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--line-bright)}
+details p a:hover{color:var(--gold-bright)}
 
 /* ── Footer ───────────────────────── */
 footer{
@@ -670,6 +672,10 @@ footer{
         <summary data-i18n="q4">手機或平板可以用嗎？</summary>
         <p data-i18n="a4">可以，頁面與工具都採響應式設計。不過影片匯出與音訊處理相當吃運算資源，這類操作建議在電腦上進行。</p>
       </details>
+      <details>
+        <summary data-i18n="q5">發現問題或有功能建議？</summary>
+        <p data-i18n-html="a5">歡迎寄信到 <a href="mailto:steventsaimusic@gmail.com">steventsaimusic@gmail.com</a>，或到 <a href="https://youtube.com/@stevenmusica" target="_blank" rel="noopener">YouTube 頻道</a>留言。</p>
+      </details>
     </div>
   </section>
 
@@ -686,6 +692,8 @@ footer{
       <li><a href="LoudNorm/">LoudMaster</a></li>
       <li><a href="LessonNotes/">LessonNotes</a></li>
       <li><a href="BackingTrack/">BackingTrack</a></li>
+      <li><a href="mailto:steventsaimusic@gmail.com" data-i18n="footerEmail">聯絡信箱</a></li>
+      <li><a href="https://youtube.com/@stevenmusica" target="_blank" rel="noopener">YouTube</a></li>
     </ul>
     <p class="copy" data-i18n="footerCopy">最後更新 2026 年 9 月</p>
   </div>
@@ -765,6 +773,9 @@ const I18N = {
     a3: "ScrollScore 支援 MusicXML 匯入；SightScore 則不需要匯入檔案，練習譜是依 ABRSM／Trinity 各級規則直接生成的。",
     q4: "手機或平板可以用嗎？",
     a4: "可以，頁面與工具都採響應式設計。不過影片匯出與音訊處理相當吃運算資源，這類操作建議在電腦上進行。",
+    q5: "發現問題或有功能建議？",
+    a5: '歡迎寄信到 <a href="mailto:steventsaimusic@gmail.com">steventsaimusic@gmail.com</a>，或到 <a href="https://youtube.com/@stevenmusica" target="_blank" rel="noopener">YouTube 頻道</a>留言。',
+    footerEmail: "聯絡信箱",
     footerCopy: "最後更新 2026 年 9 月",
   },
   en: {
@@ -828,6 +839,9 @@ const I18N = {
     a3: "ScrollScore imports MusicXML. SightScore doesn't need a file at all — it generates practice sheets directly from ABRSM/Trinity grade rules.",
     q4: "Does it work on phone or tablet?",
     a4: "Yes, the site and tools are all responsive. Video export and audio processing are resource-intensive, though, so a computer is recommended for those.",
+    q5: "Found a bug or have a feature idea?",
+    a5: 'Email me at <a href="mailto:steventsaimusic@gmail.com">steventsaimusic@gmail.com</a>, or leave a comment on my <a href="https://youtube.com/@stevenmusica" target="_blank" rel="noopener">YouTube channel</a>.',
+    footerEmail: "Email",
     footerCopy: "Last updated September 2026",
   },
 };
