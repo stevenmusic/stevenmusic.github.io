@@ -255,7 +255,6 @@ body{
     box-shadow:0 0 0 1px rgba(201,162,75,.18), 0 0 18px rgba(201,162,75,.28);
   }
   .card:hover .thumb svg{transform:scale(1.04)}
-  .card:hover .go svg{transform:translateX(4px)}
 }
 
 /* 預覽區:preview/ 底下每個工具各一組 zh/en 截圖,語言切換時由 applyLanguage 換 src。
@@ -295,13 +294,13 @@ body{
 }
 .desc{font-size:var(--fs-sm);color:var(--muted-bright);line-height:1.7}
 .who{margin-top:14px;font-size:var(--fs-xs);color:var(--muted);line-height:1.6}
+/* 卡片與主 CTA 原本有 → 箭頭,先拿掉:工具頁目前還沒有回首頁的連結,
+   等每個工具都能跳回首頁之後再加回來 */
 .go{
   margin-top:auto;padding-top:18px;
   display:flex;align-items:center;gap:6px;
   font-size:var(--fs-sm);color:var(--gold);font-weight:700;
 }
-.go svg{width:14px;height:14px;flex:none;transition:transform .2s}
-.card:active .go svg{transform:translateX(3px)}
 
 /* 卡片改成左圖右文:六張全寬預覽圖疊起來,手機頁面會長到四、五個螢幕 */
 /* 橫式截圖塞進 38% 寬的欄位裡會小到看不出是什麼,所以這裡換成直式截圖
@@ -439,7 +438,6 @@ footer{
              第一張(ScrollScore)的值,JS 沒跑起來時也還是一顆能用的按鈕 -->
         <a class="btn btn--primary" id="heroCtaMain" href="ScrollScore/">
           <span id="heroCtaMainText">開啟 ScrollScore</span>
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
         <a class="btn" href="#tools" data-i18n="heroCtaAlt">看六個工具</a>
       </div>
@@ -520,7 +518,6 @@ footer{
         <p class="desc" data-i18n="desc1">橫向捲動樂譜播放器。匯入 MusicXML 就自動排版、隨拍捲動，鋼琴與鼓組同步標示，還能匯出練習或教學影片。</p>
         <p class="who" data-i18n="who1">適合：鋼琴教師、自學者、教學影片創作者</p>
         <span class="go"><span data-i18n="cta1">開始播放樂譜</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </div>
     </a>
@@ -546,7 +543,6 @@ footer{
         <p class="desc" data-i18n="desc2">依 ABRSM／Trinity 各級規則，程式化產生無限量視奏練習譜，適合每日練習與考前準備。</p>
         <p class="who" data-i18n="who2">適合：考級學生、需要出題的教師</p>
         <span class="go"><span data-i18n="cta2">產生練習譜</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </div>
     </a>
@@ -572,7 +568,6 @@ footer{
         <p class="desc" data-i18n="desc3">互動式和弦與音階理論工具，視覺化調性關係，輔助創作、即興與樂理理解。</p>
         <p class="who" data-i18n="who3">適合：樂理學習者、編曲與即興演奏者</p>
         <span class="go"><span data-i18n="cta3">探索和聲關係</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </div>
     </a>
@@ -598,7 +593,6 @@ footer{
         <p class="desc" data-i18n="desc4">將音訊／影片響度自動校正至 -14 LUFS 標準，適用於串流平台發布前處理，全程於瀏覽器端完成。</p>
         <p class="who" data-i18n="who4">適合：影音創作者、上架串流平台前的最後一關</p>
         <span class="go"><span data-i18n="cta4">校正響度</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </div>
     </a>
@@ -625,7 +619,6 @@ footer{
         <p class="desc" data-i18n="desc5">老師與家長共用的一本琴課聯絡簿。這堂課練到哪裡、下週要帶什麼譜、家裡練得順不順，都寫在同一頁上。</p>
         <p class="who" data-i18n="who5">適合：音樂教師、想跟上孩子練習進度的家長</p>
         <span class="go"><span data-i18n="cta5">翻開琴課小簿</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </div>
     </a>
@@ -651,7 +644,6 @@ footer{
         <p class="desc" data-i18n="desc6">輸入和弦進行，程式就生成鋼琴伴奏。三種伴奏樣式、速度與移調自由調整，count-in 與循環播放，讓學生跟著彈。</p>
         <p class="who" data-i18n="who6">適合：跟著和弦練習的學生、要示範伴奏的教師、練即興與視唱的人</p>
         <span class="go"><span data-i18n="cta6">生成一組伴奏</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </div>
     </a>
